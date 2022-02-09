@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+    <meta charset="UTF-8">
+    <link href="style.css" rel="stylesheet">
+    <title>Fuel Quote Form</title>
+    <body>
+        <div>
+            <h2><em>Get Your Fuel Quote Now!</em></h2>
+            <p class="required" style="font-style: italic; font-size: smaller;">indicates required field</p>
+        </div>
+        <div class="container" style="margin-left: 7%;">
+        <form>
+        <!--method="POST" action="https:// ??? .php" enctype="multipart/form-data"-->
+            <div> 
+                <label class="required" for="date">Delivery Date:</label>
+                <input type="date" id="date" name="date" required> 
+            </div>
+            <div style="margin-top: 8px;"> <!--this will auto-populate from Client Profile-->
+                <label for="address">Delivery address:</label>
+                <input type="text" id="address" name="address">
+            </div>
+            <div style="margin-top: 8px;">
+                <label class="required" for="gallons">Gallons Requested:</label>
+                <input type="number" min="1" name="gallons" id="gallons" required></text>
+                </div>
+            <div style="margin-top: 8px;"> <!--this will auto-populate from Pricing Module-->
+               <label for="price">Suggested Price per Gallon:</label>
+               <input type="text" id="price" name="price">
+            </div>
+            <div style="margin-top: 12px;" >
+                <input type="submit" value="Get Quote" id="changeColor1">
+            </div>
+            <div style="text-align: right;"> <!--the price will come from Pricing Module-->
+                <label for="quote" style="color:#F89104; font-weight:bold;">Total Amount Due:</label>
+                <input type="text" id="quote" name="quote">
+            </div>
+            <div style="margin-top: 8px; text-align: right;">
+                <input type="submit" value="Accept and Pay" id="changeColor2">
+            </div>
+            <div style="margin-top: 8px; text-align: right;">
+                <input type="submit" value="Decline and Redo" id="changeColor3">
+            </div>
+        </form>
+        </div>
+        </div>
+        <div class="outer">
+        <div class="wrapper"> 
+            <table>
+                <caption>Your Quote History</caption>
+                    <thead>
+                        <tr>
+                            <th>Delivery Date</th>
+                            <th>Delivery Address</th>
+                            <th>Gallons Requested</th>
+                            <th>Price per Gallon</th>
+                            <th>Quote Provided</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>date</td>
+                            <td>address</td>
+                            <td>gallons</td>
+                            <td>price</td>
+                            <td>quote</td> 
+                        </tr>
+                        <tr>
+                            <td>date</td>
+                            <td>address</td>
+                            <td>gallons</td>
+                            <td>price</td>
+                            <td>quote</td> 
+                        </tr>
+                        <tr>
+                            <td>date</td>
+                            <td>address</td>
+                            <td>gallons</td>
+                            <td>price</td>
+                            <td>quote</td> 
+                        </tr>
+                        <tr>
+                            <td>date</td>
+                            <td>address</td>
+                            <td>gallons</td>
+                            <td>price</td>
+                            <td>quote</td> 
+                        </tr>
+                        <tr>
+                            <td>date</td>
+                            <td>address</td>
+                            <td>gallons</td>
+                            <td>price</td>
+                            <td>quote</td> 
+                        </tr>
+                        <tr>
+                            <td>date</td>
+                            <td>address</td>
+                            <td>gallons</td>
+                            <td>price</td>
+                            <td>quote</td> 
+                        </tr>
+                        <tr>
+                            <td>date</td>
+                            <td>address</td>
+                            <td>gallons</td>
+                            <td>price</td>
+                            <td>quote</td> 
+                        </tr>
+                    </tbody>
+            </table>
+        </div>
+        <div style="text-align: right;">
+            <input type="submit" value="Logout" id="changeColor1">
+        </div>
+        </div>
+    </body>
+</html>
