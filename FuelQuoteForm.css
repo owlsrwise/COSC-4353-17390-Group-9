@@ -3,7 +3,6 @@ body {
     margin: 0;
     background:#dfe1e2 ;
     background-position:12%, 83%;
-    
     padding: 4em;
 }
 h2 {
@@ -14,7 +13,7 @@ form label {
     text-align: left;
 }
 .container {
-    width: 600px;
+    width: 60%;
     padding-bottom: 20px;
     border: 2px #307D99 solid;
     border-radius: 5px;
@@ -24,27 +23,33 @@ form label {
     margin: 20px;
 }
 .container input {
-    width: 22%;
+    width: 50%;
 }
-#address {
-    width: 70%;
+div span {
+    margin-left:2px;
+    font-size: 10px;
+    font-style: italic;
 }
 #changeColor1:hover {
     background-color: #F89104;
     color: lightcyan;
+    border-radius: 5px;
 }
 #changeColor2:hover {
     background-color: green;
     color: lightcyan;
+    border-radius: 5px;
 }
 #changeColor3:hover {
     background-color: #307D99;
     color: lightcyan;
+    border-radius: 5px;
 }
-.required::after {
-    content: '*';
-    color: red;
-}
+.logout{
+    position:fixed;
+    right:10px;
+    top:5px;
+ }
 .wrapper {
     height: 200px;
     overflow-x: auto;
@@ -63,19 +68,19 @@ th {
     padding-right: 1em;
 }
 td:nth-child(1) {
-    width: 10px;
+    width: 1%;
 }
 td:nth-child(2) {
-    width: 400px;
+    width: 40%;
 }
 td:nth-child(3) {
-    width: 50px;
+    width: 2%;
 }
 td:nth-child(4) {
-    width: 75px;
+    width: 2%;
 }
 td:nth-child(5) {
-    width: 50px;
+    width: 5%;
 }
 caption {
     position: absolute;
@@ -84,12 +89,12 @@ caption {
     color: black; 
     background-color:  #dfe1e2;
     margin-top: -68px;
-    padding-bottom: 2px;
+    padding-bottom: 5px;
     display: table-header-group;
  }
  tr {
      height: 30px;
-     width: 800px;
+     width: 900px;
      color: black;
  }
 

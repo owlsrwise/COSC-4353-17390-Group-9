@@ -6,41 +6,66 @@
     <body>
         <div>
             <h2><em>Get Your Fuel Quote Now!</em></h2>
-            <p class="required" style="font-style: italic; font-size: smaller;">indicates required field</p>
         </div>
         <div class="container" style="margin-left: 7%;">
         <form>
         <!--method="POST" action="https:// ??? .php" enctype="multipart/form-data"-->
             <div> 
-                <label class="required" for="date">Delivery Date:</label>
-                <input type="date" id="date" name="date" required> 
+                <label class="required" for="date">Delivery Date:</label><br>
+                <input type="date" id="date" name="date" required><span>required</span> 
             </div>
             <div style="margin-top: 8px;"> <!--this will auto-populate from Client Profile-->
-                <label for="address">Delivery address:</label>
+                <label for="address">Address:</label><br>
                 <input type="text" id="address" name="address">
             </div>
+            <div style="margin-top: 8px;"> <!--this will auto-populate from Client Profile-->
+                <label for="zipcode">Zip Code:</label><br>
+                <input type="text" id="zipcode" name="zipcode">
+            </div>
+            <div style="margin-top: 8px;"> <!--this will auto-populate from Client Profile-->
+                <label for="city">City:</label><br>
+                <input type="text" id="city" name="city">
+            </div>
+            <div style="margin-top: 8px;"> <!--this will auto-populate from Client Profile-->
+                <label for="state">State:</label><br>
+                <input type="text" id="state" name="state">
+            </div>
             <div style="margin-top: 8px;">
-                <label class="required" for="gallons">Gallons Requested:</label>
-                <input type="number" min="1" name="gallons" id="gallons" required></text>
+                <label class="required" for="gallons">Gallons Requested:</label><br>
+                <input type="number" min="1" name="gallons" id="gallons" required><span>required</span>
                 </div>
             <div style="margin-top: 8px;"> <!--this will auto-populate from Pricing Module-->
-               <label for="price">Suggested Price per Gallon:</label>
+                <label for="fuel">Fuel Type Requested:</label><br>
+                <input type="text" id="fuel" name="fuel">
+            </div>
+            <div style="margin-top: 8px;"> <!--this will auto-populate from Pricing Module-->
+               <label for="price">Suggested Price per Gallon:</label><br>
                <input type="text" id="price" name="price">
             </div>
             <div style="margin-top: 12px;" >
                 <input type="submit" value="Get Quote" id="changeColor1">
             </div>
-            <div style="text-align: right;"> <!--the price will come from Pricing Module-->
-                <label for="quote" style="color:#F89104; font-weight:bold;">Total Amount Due:</label>
+            <div style="margin-top: 8px;"> <!--the price will come from Pricing Module-->
+                <label for="quote" style="color:#F89104; font-weight:bold;">Total Amount Due:</label><br>
                 <input type="text" id="quote" name="quote">
             </div>
-            <div style="margin-top: 8px; text-align: right;">
+            <div style="margin-top: 15px;">
                 <input type="submit" value="Accept and Pay" id="changeColor2">
             </div>
-            <div style="margin-top: 8px; text-align: right;">
+            <div style="margin-top: 8px;">
                 <input type="submit" value="Decline and Redo" id="changeColor3">
             </div>
+            <div style="margin-top: 8px;">
+                <input type="submit" value="View Quote History" id="changeColor3">
+            </div>
         </form>
+        </div>
+        <div style="text-align: right;">
+            <form name="form" method="post" action="log_out.php">
+                <label class="logout">
+                <input name="submit" type="submit" id="changeColor1" value="log out">    
+            </label>
+            </form>
         </div>
         </div>
         <div class="outer">
@@ -52,7 +77,9 @@
                             <th>Delivery Date</th>
                             <th>Delivery Address</th>
                             <th>Gallons Requested</th>
-                            <th>Price per Gallon</th>
+                            <th>Price Diesel</th>
+                            <th>Price Regular Unleaded</th>
+                            <th>Price Premium Unleaded</th>
                             <th>Quote Provided</th>
                         </tr>
                     </thead>
@@ -61,57 +88,69 @@
                             <td>date</td>
                             <td>address</td>
                             <td>gallons</td>
-                            <td>price</td>
+                            <td>priceD</td>
+                            <td>priceRU</td>
+                            <td>pricePU</td>
                             <td>quote</td> 
                         </tr>
                         <tr>
                             <td>date</td>
                             <td>address</td>
                             <td>gallons</td>
-                            <td>price</td>
+                            <td>priceD</td>
+                            <td>priceRU</td>
+                            <td>pricePU</td>
                             <td>quote</td> 
                         </tr>
                         <tr>
                             <td>date</td>
                             <td>address</td>
                             <td>gallons</td>
-                            <td>price</td>
+                            <td>priceD</td>
+                            <td>priceRU</td>
+                            <td>pricePU</td>
                             <td>quote</td> 
                         </tr>
                         <tr>
                             <td>date</td>
                             <td>address</td>
                             <td>gallons</td>
-                            <td>price</td>
+                            <td>priceD</td>
+                            <td>priceRU</td>
+                            <td>pricePU</td>
                             <td>quote</td> 
                         </tr>
                         <tr>
                             <td>date</td>
                             <td>address</td>
                             <td>gallons</td>
-                            <td>price</td>
+                            <td>priceD</td>
+                            <td>priceRU</td>
+                            <td>pricePU</td>
                             <td>quote</td> 
                         </tr>
                         <tr>
                             <td>date</td>
                             <td>address</td>
                             <td>gallons</td>
-                            <td>price</td>
+                            <td>priceD</td>
+                            <td>priceRU</td>
+                            <td>pricePU</td>
                             <td>quote</td> 
                         </tr>
                         <tr>
                             <td>date</td>
                             <td>address</td>
                             <td>gallons</td>
-                            <td>price</td>
+                            <td>priceD</td>
+                            <td>priceRU</td>
+                            <td>pricePU</td>
                             <td>quote</td> 
                         </tr>
                     </tbody>
             </table>
         </div>
-        <div style="text-align: right;">
-            <input type="submit" value="Logout" id="changeColor1">
-        </div>
+        
         </div>
     </body>
 </html>
