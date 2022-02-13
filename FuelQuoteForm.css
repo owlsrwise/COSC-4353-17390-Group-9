@@ -25,9 +25,16 @@ form label {
 .container input {
     width: 50%;
 }
+.container select {
+    width: 52%;
+}
 div span {
     margin-left:2px;
     font-size: 10px;
+    font-style: italic;
+}
+div input submit {
+    width: 10px;
     font-style: italic;
 }
 #changeColor1:hover {
@@ -45,10 +52,15 @@ div span {
     color: lightcyan;
     border-radius: 5px;
 }
-.logout{
+.profile{
     position:fixed;
     right:10px;
     top:5px;
+ }
+.logout{
+    position:fixed;
+    right:10px;
+    top:35px;
  }
 .wrapper {
     height: 200px;

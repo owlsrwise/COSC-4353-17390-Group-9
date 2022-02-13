@@ -3,40 +3,46 @@
     <meta charset="UTF-8">
     <link href="FuelQuoteForm.css" rel="stylesheet">
     <title>Fuel Quote Form</title>
+    
     <body>
         <div>
             <h2><em>Get Your Fuel Quote Now!</em></h2>
         </div>
-        <div class="container" style="margin-left: 7%;">
+        <div class="container" style="margin-left: 15%;">
         <form>
-        <!--method="POST" action="https:// ??? .php" enctype="multipart/form-data"-->
+        <!--method="POST" action="https:// ??? .php" enctype="multipart/form-data"-->    
             <div> 
                 <label class="required" for="date">Delivery Date:</label><br>
                 <input type="date" id="date" name="date" required><span>required</span> 
             </div>
             <div style="margin-top: 8px;"> <!--this will auto-populate from Client Profile-->
-                <label for="address">Address:</label><br>
+                <label for="address">Delivery Address:</label><br>
                 <input type="text" id="address" name="address">
             </div>
             <div style="margin-top: 8px;"> <!--this will auto-populate from Client Profile-->
-                <label for="zipcode">Zip Code:</label><br>
+                <label for="zipcode">Delivery Zip Code:</label><br>
                 <input type="text" id="zipcode" name="zipcode">
             </div>
             <div style="margin-top: 8px;"> <!--this will auto-populate from Client Profile-->
-                <label for="city">City:</label><br>
+                <label for="city">Delivery City:</label><br>
                 <input type="text" id="city" name="city">
             </div>
             <div style="margin-top: 8px;"> <!--this will auto-populate from Client Profile-->
-                <label for="state">State:</label><br>
+                <label for="state">Delivery State:</label><br>
                 <input type="text" id="state" name="state">
             </div>
             <div style="margin-top: 8px;">
                 <label class="required" for="gallons">Gallons Requested:</label><br>
                 <input type="number" min="1" name="gallons" id="gallons" required><span>required</span>
                 </div>
-            <div style="margin-top: 8px;"> <!--this will auto-populate from Pricing Module-->
-                <label for="fuel">Fuel Type Requested:</label><br>
-                <input type="text" id="fuel" name="fuel">
+            <div style="margin-top: 8px;"> 
+                <label for="fuel">Choose Fuel Type:</label><br>
+                <select name="fuel" id="fuel" required>
+                    <option value="">None</option>
+                    <option value="regUnl">Regular Unleaded</option>
+                    <option value="premUnl">Premium Unleaded</option>
+                    <option value="diesel">Diesel</option>
+                </select>
             </div>
             <div style="margin-top: 8px;"> <!--this will auto-populate from Pricing Module-->
                <label for="price">Suggested Price per Gallon:</label><br>
@@ -53,20 +59,26 @@
                 <input type="submit" value="Accept and Pay" id="changeColor2">
             </div>
             <div style="margin-top: 8px;">
-                <input type="submit" value="Decline and Redo" id="changeColor3">
+                <input type="submit" value="Decline and Redo" id="changeColor1">
             </div>
-            <div style="margin-top: 8px;">
+            <div style="margin-top: 8px;">   <!--popup a refreshed table from database-->
                 <input type="submit" value="View Quote History" id="changeColor3">
             </div>
         </form>
         </div>
         <div style="text-align: right;">
+            <form name="form" method="post" action="goToProfile.php">
+                <label class="profile">
+                <input name="submit" type="submit" id="changeColor3" value="my profile">    
+                </label>
+            </form>
+        </div>
+        <div style="text-align: right;">
             <form name="form" method="post" action="log_out.php">
                 <label class="logout">
                 <input name="submit" type="submit" id="changeColor1" value="log out">    
-            </label>
+                </label>
             </form>
-        </div>
         </div>
         <div class="outer">
         <div class="wrapper"> 
