@@ -8,34 +8,49 @@ body {
 h2 {
     color:#307D99;
     text-align: center;
+    animation-name: changeSize;
+    animation-duration: 1s;
+    animation-delay: 0s;
+    animation-timing-function: linear;
+}
+@keyframes changeSize {
+    from { font-size: smaller; }
+    to { font-size: larger; }
 }
 form label {
     text-align: left;
 }
+form div {
+    margin-top: 8px;
+}
 .container {
-    width: 60%;
-    padding-bottom: 20px;
+    width: 70%;
+    padding: 20px;
     border: 2px #307D99 solid;
     border-radius: 5px;
     box-shadow: 5px 5px gray;
 }
+.container label {
+    display: inline-block;
+    width: 180px;
+}
 .container form {
-    margin: 20px;
+    margin: 30px;
 }
 .container input {
-    width: 50%;
+    width: 60%;
 }
 .container select {
-    width: 52%;
+    width: 61%;
 }
 div span {
     margin-left:2px;
     font-size: 10px;
     font-style: italic;
 }
-div input submit {
-    width: 10px;
-    font-style: italic;
+div input[value="Get Quote"] {
+    border: 2px green solid;
+    border-radius: 5px;
 }
 #changeColor1:hover {
     background-color: #F89104;
@@ -56,17 +71,22 @@ div input submit {
     position:fixed;
     right:10px;
     top:5px;
+    border: 2px #307D99 solid;
+    border-radius: 5px;
  }
 .logout{
     position:fixed;
     right:10px;
     top:35px;
+    border: 2px #F89104 solid;
+    border-radius: 5px;
  }
 .wrapper {
     height: 200px;
     overflow-x: auto;
-    width: 700px;
+    width: 77%;
     margin-top: 30px;
+    margin-right: 80px;
     border-color: black;
 }
 th {
@@ -75,32 +95,22 @@ th {
     color: white;
     position: sticky;
     top: 0;
-    font-size: smaller;
+    font-size: 12px;
     padding-left: 1em;
     padding-right: 1em;
 }
-td:nth-child(1) {
-    width: 1%;
+td {
+    font-size: 12px;
+    width: auto;
 }
-td:nth-child(2) {
-    width: 40%;
-}
-td:nth-child(3) {
-    width: 2%;
-}
-td:nth-child(4) {
-    width: 2%;
-}
-td:nth-child(5) {
-    width: 5%;
-}
-caption {
+div caption {
     position: absolute;
     text-transform: uppercase;
     text-align: center;
-    color: black; 
+    color: black;
+    font-weight: bold; 
     background-color:  #dfe1e2;
-    margin-top: -68px;
+    margin-top: -80px;
     padding-bottom: 5px;
     display: table-header-group;
  }
@@ -109,7 +119,6 @@ caption {
      width: 900px;
      color: black;
  }
-
  tr:nth-child(even) {
     background-color: lightcyan;
  }
