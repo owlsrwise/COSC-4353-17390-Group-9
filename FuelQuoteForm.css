@@ -52,6 +52,9 @@ div input[value="Get Quote"] {
     border: 2px green solid;
     border-radius: 5px;
 }
+div ::placeholder {
+    font-size: 9px;
+}
 #changeColor1:hover {
     background-color: #F89104;
     color: lightcyan;
@@ -67,20 +70,26 @@ div input[value="Get Quote"] {
     color: lightcyan;
     border-radius: 5px;
 }
+.hello {
+    position:fixed;
+    right:100px;
+    top:0px;
+}
 .profile{
     position:fixed;
     right:10px;
-    top:5px;
+    top:10px;
     border: 2px #307D99 solid;
     border-radius: 5px;
  }
 .logout{
     position:fixed;
     right:10px;
-    top:35px;
+    top:40px;
     border: 2px #F89104 solid;
     border-radius: 5px;
  }
+
 .wrapper {
     height: 200px;
     overflow-x: auto;
