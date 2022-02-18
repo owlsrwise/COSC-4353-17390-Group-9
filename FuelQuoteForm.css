@@ -12,6 +12,7 @@ h2 {
     animation-duration: 1s;
     animation-delay: 0s;
     animation-timing-function: linear;
+    transition-timing-function: ease-in;
 }
 @keyframes changeSize {
     from { font-size: smaller; }
@@ -24,10 +25,10 @@ form div {
     margin-top: 8px;
 }
 .container {
-    width: 70%;
+    width: 65%;
     padding: 20px;
     border: 2px #307D99 solid;
-    border-radius: 5px;
+    border-radius: 10px;
     box-shadow: 5px 5px gray;
 }
 .container label {
@@ -72,20 +73,20 @@ div ::placeholder {
 }
 .hello {
     position:fixed;
-    right:100px;
+    right:10px;
     top:0px;
 }
 .profile{
     position:fixed;
     right:10px;
-    top:10px;
+    top:40px;
     border: 2px #307D99 solid;
     border-radius: 5px;
  }
 .logout{
     position:fixed;
     right:10px;
-    top:40px;
+    top:70px;
     border: 2px #F89104 solid;
     border-radius: 5px;
  }
