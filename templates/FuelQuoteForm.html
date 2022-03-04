@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <meta charset="UTF-8">
-    <link href="FuelQuoteForm.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/FuelQuoteForm.css') }}">
     <title>Fuel Quote Form</title>
     <body>
         <div>
@@ -56,7 +56,7 @@
                 <!--quote button will 1.send data to pricing module, 2. send data to history table,
                 and 3. clear the quote form for next quote -->
                 
-                <input type="submit" method="POST" value="Get Quote" onclick="getQuote()" id="changeColor2">
+                <input type="submit" method="POST" value="Get Quote" onclick="getquote()" id="changeColor2">
                 <!--validates required fields before quote submitted-->
                 <script>
                     function getQuote(){
@@ -83,7 +83,7 @@
         </div>
         <div style="text-align: right;">
             <!--<form name="form" method="post" action="goToProfile.php">-->
-            <a href="profile.html">    
+            <a href="/home/profile">    
                 <label class="profile">
                 <input name="submit" type="submit" id="changeColor3" value="my profile">    
                 </label>
@@ -92,7 +92,7 @@
         </div>
         <div style="text-align: right;">
             <!--<form name="form" method="post" action="log_out.php">-->
-            <a href="index.html">
+            <a href="/home">
                 <label class="logout">
                 <input name="submit" type="submit" id="changeColor1" value="log out">    
                 </label>
