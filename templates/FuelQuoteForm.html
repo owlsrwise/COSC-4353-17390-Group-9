@@ -8,8 +8,7 @@
             <h2><em>Get Your Fuel Quote Now!</em></h2>
         </div>
         <div class="container" style="margin:auto">
-        <form>
-        <!--method="POST" action="https:// ??? .php" enctype="multipart/form-data"-->    
+        <form method="POST" action = "http://localhost:5000/home/submitQuoteRequest" enctype="multipart/form-data">    
                       
             <div> <!--this will auto-populate from Client Profile-->
                 <label for="address1">Delivery Address 1:</label>
@@ -56,7 +55,7 @@
                 <!--quote button will 1.send data to pricing module, 2. send data to history table,
                 and 3. clear the quote form for next quote -->
                 
-                <input type="submit" method="POST" value="Get Quote" onclick="getquote()" id="changeColor2">
+                <input type="submit" value="Get Quote" onclick="getquote()" id="changeColor2">
                 <!--validates required fields before quote submitted-->
                 <script>
                     function getQuote(){
