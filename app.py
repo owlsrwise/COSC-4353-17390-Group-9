@@ -27,29 +27,32 @@ def createProfile():
     
 # --------------Molina---------------
 
-@app.route('/home/getquote/')
+@app.route('/home/getquote/')       #Run script (python -m flask run) and go to localhost:5000//home/getquote
 def getQuote():
-    return render_template('FuelQuoteForm.html')    #Run script (python -m flask run) and go to localhost:5000//home/getquote
+    return render_template('FuelQuoteForm.html') 
 
-@app.route('/home/submitQuoteRequest', methods = ['POST'])     #send quote request to server
-def quote():
+@app.route('/home/quoteresult/', methods = ['POST', 'GET'])     #send quote request to server
+def quoteResult():
+    quoteData='$530.00'             #hardcode quote data in lieu of database
+    form = request.form
+    
     if request.method == 'POST':
         date = request.form['date']
         gallons = request.form['gallons']
         fuel = request.form['fuel']
-      
+
         if fuelQuoteFormValidations.validate(date, gallons, fuel):
-            return render_template('FuelQuoteForm.html', date=date, gallons=gallons, fuel=fuel)
-            
-            # add code here to send complete form data to DB per login data
+            return render_template('FuelQuoteForm.html', form=form, quoteData=quoteData)
+    
+            # add code here to send complete form data to DB 
             # add code here to populate quote history table (profile data and quote data from DB)
         
         else:
             print("Incorrect data format, should be YYYY-MM-DD")
 
     else:
-        return render_template('FuelQuoteForm.html')
-
+        return render_template('FuelQuoteForm.html')        #return blank form
+        
 
 
                  
