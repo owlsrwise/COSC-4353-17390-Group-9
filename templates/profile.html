@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
 </head>
 <body>
+         <form method="POST">
          <div class = "hero-account">
         <section class = "top">
           <header> 
@@ -18,7 +19,7 @@
             </span>
           </button>
           </header>
-      
+    
             <h4> Welcome back, Manuel Flores!</h4>
             
             <div class="form-account">
@@ -42,5 +43,6 @@
               <input type="button2" onclick="window.location.href='/home/getquote';" value="  Get Your Quote Today! " id="cta-btn">
                     </div>
   <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
+                  </form>
 </body>
 </html>
