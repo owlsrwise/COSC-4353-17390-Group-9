@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/FuelQuoteForm.css') }}">
+    <title>Fuel Quote Form</title>
+    <body>
+        <div>
+            <h2><em>Get Your Fuel Quote Now!</em></h2>
+        </div>
+        <div class="container" style="margin:auto">
+        <form method="POST" action = "http://localhost:5000/home/quoteresult/" enctype="multipart/form-data">    
+                      
+            <div> <!--this will auto-populate from Client Profile-->
+                <label for="address1">Delivery Address 1:</label>
+                <input type="text" id="address1" name="address1" placeholder="auto-complete from db">
+            </div>
+            <div> <!--this will auto-populate from Client Profile-->
+                <label for="address2">Delivery Address 2:</label>
+                <input type="text" id="address2" name="address2" placeholder="auto-complete from db">
+            </div>
+            <div> <!--this will auto-populate from Client Profile-->
+                <label for="city">Delivery City:</label>
+                <input type="text" id="city" name="city" placeholder="auto-complete from db">
+            </div>
+            <div> <!--this will auto-populate from Client Profile-->
+                <label for="state">Delivery State:</label>
+                <input type="text" id="state" name="state" placeholder="auto-complete from db">
+            </div>
+            <div> <!--this will auto-populate from Client Profile-->
+                <label for="zipcode">Delivery Zip Code:</label>
+                <input type="text" id="zipcode" name="zipcode" placeholder="auto-complete from db">
+            </div>
+            <div> 
+                <label class="required" for="date">Delivery Date:</label>
+                <input type="date" id="date" name="date" required> 
+            </div>
+            <div>
+                <label class="required" for="gallons">Gallons Requested:</label>
+                <input type="number" min="1" name="gallons" id="gallons" required>
+                </div>
+            <div> 
+                <label for="fuel">Choose Fuel Type:</label>
+                <select name="fuel" id="fuel" required>
+                    <option value="">None</option>
+                    <option value="regUnl">Regular Unleaded</option>
+                    <option value="premUnl">Premium Unleaded</option>
+                    <option value="diesel">Diesel</option>
+                </select>
+            </div>
+            <div> <!--this will auto-populate from Pricing Module-->
+               <label for="price">Price per Gallon:</label>
+               <input type="text" id="price" name="price" placeholder="auto-complete from pricing module">
+            </div>
+            <div style="margin-top: 12px; width: 200px"> 
+                <!--quote button will 1.send data to pricing module, 2. send data to history table,
+                and 3. clear the quote form for next quote -->
+                
+                <input type="submit" value="Get Quote" onclick="getQuote()" id="changeColor2">
+                <!--validates required fields before quote submitted-->
+                <script>
+                    function getQuote(){
+                        let form_date = document.querySelector('[name="date"]').value;
+                        let form_gallons = document.querySelector('[name="gallons"]').value;
+                        let form_fuel = document.querySelector('[name="fuel"]').value;
+                        if (form_date=="" || form_gallons=="" || form_fuel=="") {
+                            return false;   //prevents quote request
+                        }
+                    }
+                </script>
+            </div>
+                
+        </form>
+        <div> <!--the price will come from Pricing Module-->
+            <label for="quote" style="color:green; font-weight: bold; font-style: italic;">Total Amount Due:  </label>
+            <input type="text" value = "{{quoteData}}" id= "quote" name="quote">
+        </div>
+        </div>
+
+        <!--These are at the top right of the page-->
+        <div class="hello" style="text-align: right; font-style: italic;">
+            <p>Hello Name!</p> 
+        </div>
+        <div style="text-align: right;">
+            <!--<form name="form" method="post" action="goToProfile.php">-->
+            <a href="/home/profile">    
+                <label class="profile">
+                <input name="submit" type="submit" id="changeColor3" value="my profile">    
+                </label>
+            </a>
+            <!--</form>-->
+        </div>
+        <div style="text-align: right;">
+            <!--<form name="form" method="post" action="log_out.php">-->
+            <a href="/home">
+                <label class="logout">
+                <input name="submit" type="submit" id="changeColor1" value="log out">    
+                </label>
+            </a>
+            <!--</form>-->
+        </div>
+        <div style="padding: 30px;">
+        </div>
+        <!--This div is for the history table-->
+        <div class="wrapper" style="margin:auto"> 
+            <table>
+                <caption>Your Quote History</caption>
+                    <thead>
+                        <tr>
+                            <th>Delivery Date</th>
+                            <th>Delivery Address 1</th>
+                            <th>Delivery Address 2</th>
+                            <th>Delivery City</th>
+                            <th>Delivery State</th>
+                            <th>Delivery Zip Code</th>
+                            <th>Gallons Requested</th>
+                            <th>Price Diesel</th>
+                            <th>Price Regular Unleaded</th>
+                            <th>Price Premium Unleaded</th>
+                            <th>Quote Provided</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>date</td>
+                            <td>address1</td>
+                            <td>address2</td>
+                            <td>city</td>
+                            <td>state</td>
+                            <td>zipcode</td>
+                            <td>gallons</td>
+                            <td>priceD</td>
+                            <td>priceRU</td>
+                            <td>pricePU</td>
+                            <td>quote</td> 
+                        </tr>
+                        <tr>
+                            <td>date</td>
+                            <td>address1</td>
+                            <td>address2</td>
+                            <td>city</td>
+                            <td>state</td>
+                            <td>zipcode</td>
+                            <td>gallons</td>
+                            <td>priceD</td>
+                            <td>priceRU</td>
+                            <td>pricePU</td>
+                            <td>quote</td> 
+                        </tr>
+                        <tr>
+                            <td>date</td>
+                            <td>address1</td>
+                            <td>address2</td>
+                            <td>city</td>
+                            <td>state</td>
+                            <td>zipcode</td>
+                            <td>gallons</td>
+                            <td>priceD</td>
+                            <td>priceRU</td>
+                            <td>pricePU</td>
+                            <td>quote</td> 
+                        </tr>
+                        <tr>
+                            <td>date</td>
+                            <td>address1</td>
+                            <td>address2</td>
+                            <td>city</td>
+                            <td>state</td>
+                            <td>zipcode</td>
+                            <td>gallons</td>
+                            <td>priceD</td>
+                            <td>priceRU</td>
+                            <td>pricePU</td>
+                            <td>quote</td> 
+                        </tr>
+                        <tr>
+                            <td>date</td>
+                            <td>address1</td>
+                            <td>address2</td>
+                            <td>city</td>
+                            <td>state</td>
+                            <td>zipcode</td>
+                            <td>gallons</td>
+                            <td>priceD</td>
+                            <td>priceRU</td>
+                            <td>pricePU</td>
+                            <td>quote</td> 
+                        </tr>
+                        <tr>
+                            <td>date</td>
+                            <td>address1</td>
+                            <td>address2</td>
+                            <td>city</td>
+                            <td>state</td>
+                            <td>zipcode</td>
+                            <td>gallons</td>
+                            <td>priceD</td>
+                            <td>priceRU</td>
+                            <td>pricePU</td>
+                            <td>quote</td> 
+                        </tr>
+                        <tr>
+                            <td>date</td>
+                            <td>address1</td>
+                            <td>address2</td>
+                            <td>city</td>
+                            <td>state</td>
+                            <td>zipcode</td>
+                            <td>gallons</td>
+                            <td>priceD</td>
+                            <td>priceRU</td>
+                            <td>pricePU</td>
+                            <td>quote</td> 
+                        </tr>
+                    </tbody>
+            </table>
+        </div>
+        
+        </div>
+    </body>
+</html>
