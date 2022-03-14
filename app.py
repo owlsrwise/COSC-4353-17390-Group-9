@@ -1,18 +1,48 @@
-
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, flash
 import fuelQuoteFormValidations
 import createProfile
 
 app = Flask(__name__)
 
-# --------------Nicole--------------
+app.config['SECRET_KEY'] = 'FSJJSKFJ'
 
-@app.route('/home/')
+   
+
+# --------------Nicole--------------
+@app.route('/', methods = ['GET', 'POST'])
+def home1():
+     data = request.form
+     print(data)
+     return render_template('index.html')
+@app.route('/home/',methods = ['GET','POST'])
 def home():
+    
     return render_template('index.html')            #Run script (python -m flask run) and go to localhost:5000/home
 
-@app.route('/home/createacc/')
+@app.route('/home/createacc/', methods=['GET', 'POST'])
 def createacc():
+    if request.method =='POST':
+        fullname= request.form.get('fullname')
+        print(fullname)
+        email = request.form.get('email')
+        print(email)
+        password1= request.form.get('password1')
+        print(password1)
+        password2=request.form.get('password2')
+        print(password2)
+
+        if len(fullname)<=2:
+            flash('Username must be at least 4 characters',category='error')
+        elif len(email)<=2:
+            flash('email must be greater than 2 character',category='error')
+        elif len(password1) < 4:
+            flash('Password must be at least 4 characters',category = 'error')
+        elif password1 != password2:
+            flash('Passwords do not match ',category='error')
+        
+        else:
+            flash('Account Created! go to profile ',category='success')
+            
     return render_template('createacc.html')        #Run script (python -m flask run) and go to localhost:5000/home/createacc
 
 # -------------Manuel------------
