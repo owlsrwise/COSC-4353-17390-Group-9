@@ -1,28 +1,87 @@
 
+from asyncio.windows_events import NULL
 from flask import Flask, request, render_template , flash
+import sqlite3
 import fuelQuoteFormValidations
 import createProfile
+from datetime import datetime
+
+
+
 
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'FSJJSKFJ'
 
+def get_db_connection():
+
+   conn = sqlite3.connect('database.db')
+   conn.row_factory = sqlite3.Row
+   return conn
+
    
+
+
+
+
+
 
 # --------------Nicole--------------
 @app.route('/', methods = ['GET', 'POST'])
 def home1():
-     data = request.form
-     print(data)
-     return render_template('index.html')
+    if request.method =='POST':
+          if(request.form.get('email')!= NULL and request.form.get('password')!= NULL) :
+            email = request.form.get('email')
+            password = request.form.get('password')
+            
+            conn= get_db_connection()
+            c=conn.cursor()
+            
+            statement = f"SELECT * from userinfo WHERE email ='{email}' AND password = '{password}';"
+            c.execute(statement)
+            data = c.fetchone()
+            if not data: 
+                return render_template("index.html")
+                
+
+            else:
+                
+                return render_template('profile.html')   
+
+    elif request.method == 'GET':
+        return render_template('index.html')
+    
+
 @app.route('/home/',methods = ['GET','POST'])
 def home():
     
-    return render_template('index.html')            #Run script (python -m flask run) and go to localhost:5000/home
+     if request.method =='POST':
+          if(request.form.get('email')!= NULL and request.form.get('password')!= NULL) :
+            email = request.form.get('email')
+            password = request.form.get('password')
+            
+            conn= get_db_connection()
+            c=conn.cursor()
+            
+            statement = f"SELECT * from userinfo WHERE email ='{email}' AND password = '{password}';"
+            c.execute(statement)
+            data = c.fetchone()
+            if not data: 
+                return render_template("index.html")
+                
+
+            else:
+                
+                return render_template('profile.html')   
+
+     elif request.method == 'GET':
+        return render_template('index.html')
 
 @app.route('/home/createacc/', methods=['GET', 'POST'])
 def createacc():
+
     if request.method =='POST':
+      if(request.form.get('email')!= NULL and request.form.get('password')!= NULL) :  
         fullname= request.form.get('fullname')
         print(fullname)
         email = request.form.get('email')
@@ -31,18 +90,27 @@ def createacc():
         print(password1)
         password2=request.form.get('password2')
         print(password2)
+        if password1 == password2 :
+         conn= get_db_connection()
+         c=conn.cursor()
+         statement = f"SELECT * from userinfo WHERE email ='{email}' AND password = '{password1}';"
+         c.execute(statement)
+         data = c.fetchone()
+         if data: 
+                return render_template("error.html")
 
-        if len(fullname)<=2:
-            flash('Username must be at least 4 characters',category='error')
-        elif len(email)<=2:
-            flash('email must be greater than 2 character',category='error')
-        elif len(password1) < 4:
-            flash('Password must be at least 4 characters',category = 'error')
-        elif password1 != password2:
-            flash('Passwords do not match ',category='error')
-        
+         else:
+            if not data:
+                    conn.execute('INSERT INTO userinfo2 (fullname,email,password1,password2) VALUES(?,?,?,?)',(fullname,email,password1,password2))
+                    conn.commit()
+                    conn.close() 
+            return render_template('createprofile.html')   
         else:
-            flash('Account Created! go to profile ',category='success')
+            return render_template('error.html')
+    elif request.method == 'GET':
+        return render_template('createacc.html')
+               #Run script (python -m flask run) and go to localhost:5000/home
+        
             
     return render_template('createacc.html')        #Run script (python -m flask run) and go to localhost:5000/home/createacc
 
@@ -124,3 +192,6 @@ def quoteResult():
 
 if __name__ == '__main__':
    app.run(host='0.0.0.0', port=5000, threaded=True, debug=True)
+
+
+
