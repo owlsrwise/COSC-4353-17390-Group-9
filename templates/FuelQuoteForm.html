@@ -117,84 +117,20 @@
                             <th>Quote Provided</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody>                
+                        {% for row in quoteHistory %}
                         <tr>
-                            <td>date</td>
-                            <td>address1</td>
-                            <td>address2</td>
-                            <td>city</td>
-                            <td>state</td>
-                            <td>zipcode</td>
-                            <td>gallons</td>
-                            <td>fuel</td>
-                            <td>quote</td> 
+                            <td>{{row['date']}}</td>
+                            <td>{{row['address1']}}</td>
+                            <td>{{row['address2']}}</td>
+                            <td>{{row['city']}}</td>
+                            <td>{{row['state']}}</td>
+                            <td>{{row['zipcode']}}</td>
+                            <td>{{row['gallons']}}</td>
+                            <td>{{row['fuel']}}</td>
+                            <td>{{row['quote']}}</td> 
                         </tr>
-                        <tr>
-                            <td>date</td>
-                            <td>address1</td>
-                            <td>address2</td>
-                            <td>city</td>
-                            <td>state</td>
-                            <td>zipcode</td>
-                            <td>gallons</td>
-                            <td>fuel</td>
-                            <td>quote</td> 
-                        </tr>
-                        <tr>
-                            <td>date</td>
-                            <td>address1</td>
-                            <td>address2</td>
-                            <td>city</td>
-                            <td>state</td>
-                            <td>zipcode</td>
-                            <td>gallons</td>
-                            <td>fuel</td>
-                            <td>quote</td> 
-                        </tr>
-                        <tr>
-                            <td>date</td>
-                            <td>address1</td>
-                            <td>address2</td>
-                            <td>city</td>
-                            <td>state</td>
-                            <td>zipcode</td>
-                            <td>gallons</td>
-                            <td>fuel</td>
-                            <td>quote</td> 
-                        </tr>
-                        <tr>
-                            <td>date</td>
-                            <td>address1</td>
-                            <td>address2</td>
-                            <td>city</td>
-                            <td>state</td>
-                            <td>zipcode</td>
-                            <td>gallons</td>
-                            <td>fuel</td>
-                            <td>quote</td> 
-                        </tr>
-                        <tr>
-                            <td>date</td>
-                            <td>address1</td>
-                            <td>address2</td>
-                            <td>city</td>
-                            <td>state</td>
-                            <td>zipcode</td>
-                            <td>gallons</td>
-                            <td>fuel</td>
-                            <td>quote</td> 
-                        </tr>
-                        <tr>
-                            <td>date</td>
-                            <td>address1</td>
-                            <td>address2</td>
-                            <td>city</td>
-                            <td>state</td>
-                            <td>zipcode</td>
-                            <td>gallons</td>
-                            <td>fuel</td>
-                            <td>quote</td> 
-                        </tr>
+                        {% endfor %}
                     </tbody>
             </table>
         </div>
