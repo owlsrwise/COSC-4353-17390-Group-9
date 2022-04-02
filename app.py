@@ -5,10 +5,17 @@ import createProfile
 
 def get_db_connection():
     conn = sqlite3.connect('database.db')
-    conn.row_factory = sqlite3.Row
+    conn.row_factory = sqlite3.Row          #this allows query results to return as dicts
     return conn
 
-
+#this function returns customer profile as a dict, to render in html quote form
+def getProfileData (custId):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    query = f'SELECT * from DummyProfile WHERE custID={custId}'
+    cur.execute(query)
+    row = cur.fetchall()        #list with 1 dict (1 row for custID)
+    return dict(row[0])
 
 app = Flask(__name__)
 
@@ -101,7 +108,11 @@ def createProfile():
 
 @app.route('/home/getquote/')       #Run script (python -m flask run) and go to localhost:5000//home/getquote
 def getQuote():
-    return render_template('FuelQuoteForm.html') 
+    # populate profile data into top of quote form
+    #custId = request.form['custId']    #custId from post form sent by Manuel
+    custId='001'
+    profile = getProfileData(custId)
+    return render_template('FuelQuoteForm.html', profile=profile) 
 
 @app.route('/home/quoteresult/', methods = ['POST', 'GET'])     #send quote request to server
 def quoteResult():
@@ -113,7 +124,8 @@ def quoteResult():
         date = request.form['date']
         gallons = request.form['gallons']
         fuel = request.form['fuel']
-
+        profile = getProfileData(custId)
+        
         if fuelQuoteFormValidations.validate(date, gallons, fuel):           
             # form data -> pricing module -> compare state to FuelPrices db table -> populate FuelQuoteData db table
             # pricing module here
@@ -128,7 +140,7 @@ def quoteResult():
             
 
             conn.close()
-            return render_template('FuelQuoteForm.html', form=form, quote=quote)    
+            return render_template('FuelQuoteForm.html', form=form, quote=quote, profile=profile)    
         
         else:
             print("Incorrect data format, should be YYYY-MM-DD")
