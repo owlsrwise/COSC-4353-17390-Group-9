@@ -62,6 +62,7 @@ def profile():
 
 @app.route('/home/createprofile/')
 def createProfile(): 
+    custId='001'  
     errorOccurred = ""
     errors = 0
     name = request.form.get("name")
@@ -88,10 +89,20 @@ def createProfile():
     if len(zipcode) > 9 or len(zipcode) < 5:
         errorOccurred += print("A zipcode is needed, must be between 5-9 characters.")
         errors += 1
-    print(errors, "Error", errorOccurred)
+        
+    if createProfile.validate(name, address1, address2, city, zipcode):           
+
+                conn = get_db_connection()
+                conn.execute('INSERT INTO createprofile (custId, name, address1, address2, city, zipcode) VALUES (?, ?, ?, ?, ?, ?)',
+                            (custId, name, address1, address2, city, zipcode))
+                conn.commit()
+
+                conn.close()
+                print(errors, "Error", errorOccurred)
     if errors >= 1:
-        return render_template('profile.html', error=errorOccurred,
-            name=name, address1=address1, address2=address2, city=city, zipcode=zipcode)
+            return render_template('profile.html', error=errorOccurred,
+            name=name, address1=address1, address2=address2, city=city, zipcode=zipcode)  
+        
     else: 
         errorOccurred = "Finished Profile"
         print(request.form)
