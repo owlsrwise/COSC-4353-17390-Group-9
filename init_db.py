@@ -22,16 +22,11 @@ cur.execute('''CREATE TABLE FuelPrices
     regUnl REAL NOT NULL,
     premUnl REAL NOT NULL)''')    # state column will have either 'Texas' or 'other' 
 
-# initial values to test database
-cur.execute("INSERT INTO FuelQuoteData (custId, date, gallons, fuel, quote) \
-    VALUES ('001','02/18/2022', 5, 'regUnl', '19.50')")
 
-cur.execute("INSERT INTO FuelPrices (state, diesel, regUnl, premUnl) \
-    VALUES ('Texas', '4.00', '3.90', '4.20')")
+#cur.execute("INSERT INTO FuelPrices (state, diesel, regUnl, premUnl) \
+#    VALUES ('Texas', '4.00', '3.90', '4.20')")
 
-conn.commit()
-print ("Records created successfully")
-conn.close()
+
 
 # Manuel's Table
 
@@ -47,9 +42,6 @@ cur.execute("""CREATE TABLE createprofile (
             zipcode INTEGER NOT NULL
             )""")
 
-
-cur.execute("INSERT INTO FuelQuoteData (custId, name, address1, address2, city, zipcode) \
-    VALUES ('001','Manuel Flores', '123 Fuel St.', '123 Fuel St.', 'Houston', 77346)")
 
 conn.commit()
 print ("Records created successfully")
