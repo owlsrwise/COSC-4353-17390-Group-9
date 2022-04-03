@@ -32,3 +32,23 @@ cur.execute("INSERT INTO FuelPrices (state, diesel, regUnl, premUnl) \
 conn.commit()
 print ("Records created successfully")
 conn.close()
+
+# Manuel's Table
+
+cur.execute("DROP TABLE IF EXISTS createprofile")
+cur.execute("""CREATE TABLE createprofile (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT PRIMARY KEY NOT NULL,
+            address1 TEXT NOT NULL,
+            address2 TEXT NOT NULL,
+            city TEXT NOT NULL,
+            zipcode INTEGER NOT NULL
+            )""")
+
+
+cur.execute("INSERT INTO FuelQuoteData (custId, name, address1, address2, city, zipcode) \
+    VALUES ('001','Manuel Flores', '123 Fuel St.', '123 Fuel St.', 'Houston', 77346)")
+
+conn.commit()
+print ("Records created successfully")
+conn.close()
