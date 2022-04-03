@@ -111,7 +111,7 @@ def createProfile():
 def getProfileData (custId):
     conn = get_db_connection()
     cur = conn.cursor()
-    query = f'SELECT * from TestProfileDB WHERE custID={custId}'
+    query = f'SELECT * from createprofile WHERE custID={custId}'
     cur.execute(query)
     row = cur.fetchall()        #list with 1 dict (1 row for custID)
     return dict(row[0])
@@ -120,8 +120,8 @@ def getProfileData (custId):
 def getQuoteHistory (custId):
     conn = get_db_connection()
     cur = conn.cursor()
-    query = f'select address1, address2, city, state, zipcode, date, gallons, fuel, quote FROM TestProfileDB \
-            INNER JOIN FuelQuoteData ON FuelQuoteData.custId = TestProfileDB.custId \
+    query = f'select address1, address2, city, state, zipcode, date, gallons, fuel, quote FROM createprofile \
+            INNER JOIN FuelQuoteData ON FuelQuoteData.custId = createprofile.custId \
             WHERE FuelQuoteData.custId={custId} \
             ORDER BY date DESC'
     cur.execute(query)
