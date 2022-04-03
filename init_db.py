@@ -38,6 +38,8 @@ conn.close()
 cur.execute("DROP TABLE IF EXISTS createprofile")
 cur.execute("""CREATE TABLE createprofile (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            custId INTEGER NOT NULL,
+            state TEXT NOT NULL,
             name TEXT PRIMARY KEY NOT NULL,
             address1 TEXT NOT NULL,
             address2 TEXT NOT NULL,
