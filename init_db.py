@@ -5,6 +5,22 @@ conn = sqlite3.connect('database.db')
 cur = conn.cursor()
 print ("Opened database successfully")
 
+# Nicole's tables
+cur.execute("DROP TABLE IF EXISTS userinfo")
+cur.execute('''CREATE TABLE userinfo          
+    (id INTEGER PRIMARY KEY AUTOINCREMENT,
+    email TEXT,
+    password TEXT)''') 
+
+
+cur.execute("DROP TABLE IF EXISTS userinfo2")
+cur.execute('''CREATE TABLE userinfo2          
+    (id INTEGER PRIMARY KEY AUTOINCREMENT,
+    fullname TEXT,
+    email TEXT,
+    password1 TEXT,
+    password2 TEXT)''') 
+
 #  Molina's tables 
 cur.execute("DROP TABLE IF EXISTS FuelQuoteData")
 cur.execute('''CREATE TABLE FuelQuoteData          
@@ -22,16 +38,11 @@ cur.execute('''CREATE TABLE FuelPrices
     regUnl REAL NOT NULL,
     premUnl REAL NOT NULL)''')    # state column will have either 'Texas' or 'other' 
 
-# initial values to test database
-cur.execute("INSERT INTO FuelQuoteData (custId, date, gallons, fuel, quote) \
-    VALUES ('001','02/18/2022', 5, 'regUnl', '19.50')")
 
-cur.execute("INSERT INTO FuelPrices (state, diesel, regUnl, premUnl) \
-    VALUES ('Texas', '4.00', '3.90', '4.20')")
+#cur.execute("INSERT INTO FuelPrices (state, diesel, regUnl, premUnl) \
+#    VALUES ('Texas', '4.00', '3.90', '4.20')")
 
-conn.commit()
-print ("Records created successfully")
-conn.close()
+
 
 # Manuel's Table
 
@@ -47,9 +58,6 @@ cur.execute("""CREATE TABLE createprofile (
             zipcode INTEGER NOT NULL
             )""")
 
-
-cur.execute("INSERT INTO FuelQuoteData (custId, name, address1, address2, city, zipcode) \
-    VALUES ('001','Manuel Flores', '123 Fuel St.', '123 Fuel St.', 'Houston', 77346)")
 
 conn.commit()
 print ("Records created successfully")
