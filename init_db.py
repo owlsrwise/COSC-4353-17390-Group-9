@@ -5,6 +5,22 @@ conn = sqlite3.connect('database.db')
 cur = conn.cursor()
 print ("Opened database successfully")
 
+# Nicole's tables
+cur.execute("DROP TABLE IF EXISTS userinfo")
+cur.execute('''CREATE TABLE userinfo          
+    (id INTEGER PRIMARY KEY AUTOINCREMENT,
+    email TEXT,
+    password TEXT)''') 
+
+
+cur.execute("DROP TABLE IF EXISTS userinfo2")
+cur.execute('''CREATE TABLE userinfo2          
+    (id INTEGER PRIMARY KEY AUTOINCREMENT,
+    fullname TEXT,
+    email TEXT,
+    password1 TEXT,
+    password2 TEXT)''') 
+
 #  Molina's tables 
 cur.execute("DROP TABLE IF EXISTS FuelQuoteData")
 cur.execute('''CREATE TABLE FuelQuoteData          
