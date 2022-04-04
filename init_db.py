@@ -5,6 +5,22 @@ conn = sqlite3.connect('database.db')
 cur = conn.cursor()
 print ("Opened database successfully")
 
+# Nicole's tables
+cur.execute("DROP TABLE IF EXISTS userinfo")
+cur.execute('''CREATE TABLE userinfo          
+    (id INTEGER PRIMARY KEY AUTOINCREMENT,
+    email TEXT,
+    password TEXT)''') 
+
+
+cur.execute("DROP TABLE IF EXISTS userinfo2")
+cur.execute('''CREATE TABLE userinfo2          
+    (id INTEGER PRIMARY KEY AUTOINCREMENT,
+    fullname TEXT,
+    email TEXT,
+    password1 TEXT,
+    password2 TEXT)''') 
+
 #  Molina's tables 
 cur.execute("DROP TABLE IF EXISTS FuelQuoteData")
 cur.execute('''CREATE TABLE FuelQuoteData          
@@ -26,24 +42,6 @@ cur.execute('''CREATE TABLE FuelPrices
 #cur.execute("INSERT INTO FuelPrices (state, diesel, regUnl, premUnl) \
 #    VALUES ('Texas', '4.00', '3.90', '4.20')")
 
-#Nicole's table
-
-
-
-cur.execute("DROP TABLE IF EXISTS userinfo")
-cur.execute('''CREATE TABLE userinfo          
-    (id INTEGER PRIMARY KEY AUTOINCREMENT,
-    email TEXT,
-    password TEXT)''') 
-
-
-cur.execute("DROP TABLE IF EXISTS userinfo2")
-cur.execute('''CREATE TABLE userinfo2          
-    (id INTEGER PRIMARY KEY AUTOINCREMENT,
-    fullname TEXT,
-    email TEXT,
-    password1 TEXT,
-    password2 TEXT)''') 
 
 
 # Manuel's Table

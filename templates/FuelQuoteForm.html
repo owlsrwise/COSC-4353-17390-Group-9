@@ -12,35 +12,35 @@
                       
             <div> <!--this will auto-populate from Client Profile-->
                 <label for="address1">Delivery Address 1:</label>
-                <input type="text" id="address1" name="address1" placeholder="auto-complete from db">
+                <input type="text" id="address1" name="address1" value="{{profile['address1']}}" placeholder="auto-complete from db">
             </div>
             <div> <!--this will auto-populate from Client Profile-->
                 <label for="address2">Delivery Address 2:</label>
-                <input type="text" id="address2" name="address2" placeholder="auto-complete from db">
+                <input type="text" id="address2" name="address2" value="{{profile['address2']}}" placeholder="auto-complete from db">
             </div>
             <div> <!--this will auto-populate from Client Profile-->
                 <label for="city">Delivery City:</label>
-                <input type="text" id="city" name="city" placeholder="auto-complete from db">
+                <input type="text" id="city" name="city" value="{{profile['city']}}" placeholder="auto-complete from db">
             </div>
             <div> <!--this will auto-populate from Client Profile-->
                 <label for="state">Delivery State:</label>
-                <input type="text" id="state" name="state" placeholder="auto-complete from db">
+                <input type="text" id="state" name="state" value="{{profile['state']}}" placeholder="auto-complete from db">
             </div>
             <div> <!--this will auto-populate from Client Profile-->
                 <label for="zipcode">Delivery Zip Code:</label>
-                <input type="text" id="zipcode" name="zipcode" placeholder="auto-complete from db">
+                <input type="text" id="zipcode" name="zipcode" value="{{profile['zipcode']}}" placeholder="auto-complete from db">
             </div>
             <div> 
                 <label class="required" for="date">Delivery Date:</label>
-                <input type="date" id="date" name="date" required> 
+                <input type="date" id="date" name="date" value="{{date}}" required > 
             </div>
             <div>
                 <label class="required" for="gallons">Gallons Requested:</label>
-                <input type="number" min="1" name="gallons" id="gallons" required>
+                <input type="number" min="1" name="gallons" id="gallons" value="{{gallons}}" required>
                 </div>
             <div> 
                 <label for="fuel">Choose Fuel Type:</label>
-                <select name="fuel" id="fuel" required>
+                <select name="fuel" id="fuel" value="{{fuel}}" required>
                     <option value="">None</option>
                     <option value="regUnl">Regular Unleaded</option>
                     <option value="premUnl">Premium Unleaded</option>
@@ -72,7 +72,7 @@
         </form>
         <div> <!--the price will come from Pricing Module-->
             <label for="quote" style="color:green; font-weight: bold; font-style: italic;">Total Amount Due:  </label>
-            <input type="text" value = "{{quoteData}}" id= "quote" name="quote">
+            <input type="text" value = "{{quote}}" id= "quote" name="quote">
         </div>
         </div>
 
@@ -113,104 +113,24 @@
                             <th>Delivery State</th>
                             <th>Delivery Zip Code</th>
                             <th>Gallons Requested</th>
-                            <th>Price Diesel</th>
-                            <th>Price Regular Unleaded</th>
-                            <th>Price Premium Unleaded</th>
+                            <th>Fuel Type Requested</th>
                             <th>Quote Provided</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody>                
+                        {% for row in quoteHistory %}
                         <tr>
-                            <td>date</td>
-                            <td>address1</td>
-                            <td>address2</td>
-                            <td>city</td>
-                            <td>state</td>
-                            <td>zipcode</td>
-                            <td>gallons</td>
-                            <td>priceD</td>
-                            <td>priceRU</td>
-                            <td>pricePU</td>
-                            <td>quote</td> 
+                            <td>{{row['date']}}</td>
+                            <td>{{row['address1']}}</td>
+                            <td>{{row['address2']}}</td>
+                            <td>{{row['city']}}</td>
+                            <td>{{row['state']}}</td>
+                            <td>{{row['zipcode']}}</td>
+                            <td>{{row['gallons']}}</td>
+                            <td>{{row['fuel']}}</td>
+                            <td>{{row['quote']}}</td> 
                         </tr>
-                        <tr>
-                            <td>date</td>
-                            <td>address1</td>
-                            <td>address2</td>
-                            <td>city</td>
-                            <td>state</td>
-                            <td>zipcode</td>
-                            <td>gallons</td>
-                            <td>priceD</td>
-                            <td>priceRU</td>
-                            <td>pricePU</td>
-                            <td>quote</td> 
-                        </tr>
-                        <tr>
-                            <td>date</td>
-                            <td>address1</td>
-                            <td>address2</td>
-                            <td>city</td>
-                            <td>state</td>
-                            <td>zipcode</td>
-                            <td>gallons</td>
-                            <td>priceD</td>
-                            <td>priceRU</td>
-                            <td>pricePU</td>
-                            <td>quote</td> 
-                        </tr>
-                        <tr>
-                            <td>date</td>
-                            <td>address1</td>
-                            <td>address2</td>
-                            <td>city</td>
-                            <td>state</td>
-                            <td>zipcode</td>
-                            <td>gallons</td>
-                            <td>priceD</td>
-                            <td>priceRU</td>
-                            <td>pricePU</td>
-                            <td>quote</td> 
-                        </tr>
-                        <tr>
-                            <td>date</td>
-                            <td>address1</td>
-                            <td>address2</td>
-                            <td>city</td>
-                            <td>state</td>
-                            <td>zipcode</td>
-                            <td>gallons</td>
-                            <td>priceD</td>
-                            <td>priceRU</td>
-                            <td>pricePU</td>
-                            <td>quote</td> 
-                        </tr>
-                        <tr>
-                            <td>date</td>
-                            <td>address1</td>
-                            <td>address2</td>
-                            <td>city</td>
-                            <td>state</td>
-                            <td>zipcode</td>
-                            <td>gallons</td>
-                            <td>priceD</td>
-                            <td>priceRU</td>
-                            <td>pricePU</td>
-                            <td>quote</td> 
-                        </tr>
-                        <tr>
-                            <td>date</td>
-                            <td>address1</td>
-                            <td>address2</td>
-                            <td>city</td>
-                            <td>state</td>
-                            <td>zipcode</td>
-                            <td>gallons</td>
-                            <td>priceD</td>
-                            <td>priceRU</td>
-                            <td>pricePU</td>
-                            <td>quote</td> 
-                        </tr>
+                        {% endfor %}
                     </tbody>
             </table>
         </div>

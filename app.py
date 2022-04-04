@@ -1,12 +1,9 @@
-
 from asyncio.windows_events import NULL
 from flask import Flask, request, render_template , flash
 import sqlite3
 import fuelQuoteFormValidations
 import createProfile
 from datetime import datetime
-
-
 
 
 app = Flask(__name__)
@@ -18,12 +15,6 @@ def get_db_connection():
    conn = sqlite3.connect('database.db')
    conn.row_factory = sqlite3.Row
    return conn
-
-   
-
-
-
-
 
 
 # --------------Nicole--------------
@@ -123,6 +114,7 @@ def profile():
 
 @app.route('/home/createprofile/')
 def createProfile(): 
+    custId='001'
     errorOccurred = ""
     errors = 0
     name = request.form.get("name")
@@ -149,10 +141,20 @@ def createProfile():
     if len(zipcode) > 9 or len(zipcode) < 5:
         errorOccurred += print("A zipcode is needed, must be between 5-9 characters.")
         errors += 1
-    print(errors, "Error", errorOccurred)
+
+    if createProfile.validate(name, address1, address2, city, zipcode):           
+
+            conn = get_db_connection()
+            conn.execute('INSERT INTO createprofile (custId, name, address1, address2, city, zipcode) VALUES (?, ?, ?, ?, ?, ?)',
+                            (custId, name, address1, address2, city, zipcode))
+            conn.commit()
+
+            conn.close()
+            print(errors, "Error", errorOccurred)
     if errors >= 1:
         return render_template('profile.html', error=errorOccurred,
             name=name, address1=address1, address2=address2, city=city, zipcode=zipcode)
+            
     else: 
         errorOccurred = "Finished Profile"
         print(request.form)
@@ -160,25 +162,65 @@ def createProfile():
     
 # --------------Molina---------------
 
+#this function returns customer profile as a dict, to render in html quote form
+def getProfileData (custId):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    query = f'SELECT * from createprofile WHERE custID={custId}'
+    cur.execute(query)
+    row = cur.fetchall()        #list with 1 dict (1 row for custID)
+    return dict(row[0])
+
+#this function returns a list of dicts where each dict is a row in the query result (history)
+def getQuoteHistory (custId):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    query = f'select address1, address2, city, state, zipcode, date, gallons, fuel, quote FROM createprofile \
+            INNER JOIN FuelQuoteData ON FuelQuoteData.custId = createprofile.custId \
+            WHERE FuelQuoteData.custId={custId} \
+            ORDER BY date DESC'
+    cur.execute(query)
+    queryResult = cur.fetchall()        
+    quoteHistory = []
+    for row in queryResult:
+        quoteHistory.append(dict(row))     #cast each row in query list as a dict; append to history
+    return quoteHistory
+
 @app.route('/home/getquote/')       #Run script (python -m flask run) and go to localhost:5000//home/getquote
 def getQuote():
-    return render_template('FuelQuoteForm.html') 
+    # populate profile data into top of quote form
+    #custId = request.form['custId']    #custId extracted from profile 'Get Your Quote Today' button
+    custId='001'
+    profile = getProfileData(custId)
+    quoteHistory = getQuoteHistory(custId)            
+    return render_template('FuelQuoteForm.html', profile=profile, quoteHistory=quoteHistory)  
 
 @app.route('/home/quoteresult/', methods = ['POST', 'GET'])     #send quote request to server
 def quoteResult():
-    quoteData='$530.00'             #hardcode quote data in lieu of database
+    custId='001'               #hardcode quote data in lieu of profile data
     form = request.form
     
     if request.method == 'POST':
         date = request.form['date']
         gallons = request.form['gallons']
         fuel = request.form['fuel']
+        profile = getProfileData(custId)
 
         if fuelQuoteFormValidations.validate(date, gallons, fuel):
-            return render_template('FuelQuoteForm.html', form=form, quoteData=quoteData)
-    
-            # add code here to send complete form data to DB 
-            # add code here to populate quote history table (profile data and quote data from DB)
+            # form data -> pricing module -> compare state to FuelPrices db table -> populate FuelQuoteData db table
+            # pricing module here
+            quote='$19.50'             #hardcode quote data in lieu of pricing module
+            
+            # populate FuelQuoteData db table
+            conn = get_db_connection()
+            conn.execute('INSERT INTO FuelQuoteData (custId, date, gallons, fuel, quote) VALUES (?, ?, ?, ?, ?)',
+                         (custId, date, gallons, fuel, quote))
+            conn.commit()
+            conn.close()
+            
+            # populate Quote History user view
+            quoteHistory = getQuoteHistory(custId)            
+            return render_template('FuelQuoteForm.html', form=form, quote=quote, profile=profile, quoteHistory=quoteHistory)    
         
         else:
             print("Incorrect data format, should be YYYY-MM-DD")
@@ -192,6 +234,4 @@ def quoteResult():
 
 if __name__ == '__main__':
    app.run(host='0.0.0.0', port=5000, threaded=True, debug=True)
-
-
 
