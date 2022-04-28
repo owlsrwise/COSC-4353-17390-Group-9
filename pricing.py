@@ -17,5 +17,5 @@ class pricing:
 
      return suggestedPrice
 
-#returns total
+
     
