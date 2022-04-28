@@ -4,6 +4,7 @@ import sqlite3
 import fuelQuoteFormValidations
 import createProfile
 from datetime import datetime
+import init_db
 
 
 app = Flask(__name__)
@@ -11,10 +12,11 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'FSJJSKFJ'
 
 def get_db_connection():
-
-   conn = sqlite3.connect('database.db')
-   conn.row_factory = sqlite3.Row
-   return conn
+    conn = sqlite3.connect('database.db')
+    init_db.init_db(conn)                       #module calling function init_db.py
+    print ("Opened database successfully")
+    conn.row_factory = sqlite3.Row
+    return conn
 
 
 # --------------Nicole--------------
@@ -93,6 +95,7 @@ def createacc():
          else:
             if not data:
                     conn.execute('INSERT INTO userinfo2 (fullname,email,password1,password2) VALUES(?,?,?,?)',(fullname,email,password1,password2))
+                    conn.execute('INSERT INTO userinfo (email,password) VALUES(?,?)',(email,password1))
                     conn.commit()
                     conn.close() 
             return render_template('createprofile.html')   
