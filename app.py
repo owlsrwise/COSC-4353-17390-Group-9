@@ -2,7 +2,7 @@ from asyncio.windows_events import NULL
 from flask import Flask, request, render_template , flash
 import sqlite3
 import fuelQuoteFormValidations
-import createProfile
+import validateProfile
 from datetime import datetime
 import init_db
 
@@ -110,58 +110,57 @@ def createacc():
 
 # -------------Manuel------------
 
-@app.route('/home/profile/')
+@app.route('/home/profile/', methods=['GET', 'POST'])
 def profile():
     return render_template('profile.html') #Run script (python -m flask run) and go to localhost:5000/home/profile
 
 
-@app.route('/home/createprofile/')
+@app.route('/home/createprofile/', methods=['GET', 'POST'])
 def createProfile(): 
     custId='001'
     errorOccurred = ""
     errors = 0
-    name = request.form.get("name")
+    name = request.form.get("Full Name")
     if len(name) > 50 or len(name) <= 0:
         errorOccurred +=  print("Full name is needed with a max of 50 characters.")
         errors += 1
-    address1 = request.form.get("address1")
+    address1 = request.form.get("Address 1")
     if len(address1) > 100 or len(address1) <= 0:
         errorOccurred += print("An address is needed with a max of 100 characters.")
         errors += 1
-    address2 = request.form.get("address2")
+    address2 = request.form.get("Address 2")
     if len(address2) > 100:
         errorOccurred += print("Can only have a max of 100 characters.")
         errors += 1
-    city = request.form.get("city")
+    city = request.form.get("City")
     if len(city) > 100 or len(city) <= 0:
         errorOccurred += print("A city is needed with a max of 100 characters.")
         errors += 1
-    state = request.form.get("state")
+    state = request.form.get("State")
     if state == "":
         errorOccurred += print("A state is Needed, choose at least one.")
         errors += 1
-    zipcode = request.form.get("zipcode")
+    zipcode = request.form.get("Zipcode")
     if len(zipcode) > 9 or len(zipcode) < 5:
         errorOccurred += print("A zipcode is needed, must be between 5-9 characters.")
         errors += 1
 
-    if createProfile.validate(name, address1, address2, city, zipcode):           
+    if validateProfile.validate(name, address1, address2, city, state, zipcode):           
 
             conn = get_db_connection()
-            conn.execute('INSERT INTO createprofile (custId, name, address1, address2, city, zipcode) VALUES (?, ?, ?, ?, ?, ?)',
-                            (custId, name, address1, address2, city, zipcode))
+            conn.execute('INSERT INTO createprofile (custId, name, address1, address2, city, state, zipcode) VALUES (?, ?, ?, ?, ?, ?, ?)',
+                            (custId, name, address1, address2, city, state, zipcode))
             conn.commit()
 
             conn.close()
             print(errors, "Error", errorOccurred)
     if errors >= 1:
-        return render_template('profile.html', error=errorOccurred,
-            name=name, address1=address1, address2=address2, city=city, zipcode=zipcode)
+        return render_template('createprofile.html', error=errorOccurred)
             
     else: 
         errorOccurred = "Finished Profile"
         print(request.form)
-        return render_template('createprofile.html', error=errorOccurred) #Run script (python -m flask run) and go to localhost:5000/home/createprofile
+        return render_template('profile.html', name=name, address1=address1, address2=address2, city=city, state=state, zipcode=zipcode) 
     
 # --------------Molina---------------
 
@@ -227,7 +226,7 @@ def quoteResult():
         
         else:
             print("Incorrect data format, should be YYYY-MM-DD")
-
+            return render_template('FuelQuoteForm.html')
     else:
         return render_template('FuelQuoteForm.html')        #return blank form
         
