@@ -6,7 +6,7 @@ import validateProfile
 from datetime import datetime
 import init_db
 
-
+custId = None               #customer id to be unique for each user
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'FSJJSKFJ'
@@ -37,9 +37,18 @@ def home1():
                 return render_template("index.html")
                 
 
-            else:
-                
-                return render_template('profile.html')   
+            else:       
+                userRow = dict(data)
+                global custId
+                custId = userRow['id']          #takes autoincrement row id into custId
+                statement = f"SELECT * from createprofile WHERE custId = '{custId}';"
+                conn= get_db_connection()
+                c=conn.cursor()
+                c.execute(statement)
+                data = c.fetchone()
+                conn.close()
+                profile = dict(data)
+                return render_template('profile.html', profile=profile)   
 
     elif request.method == 'GET':
         return render_template('index.html')
@@ -47,9 +56,10 @@ def home1():
 
 @app.route('/home/',methods = ['GET','POST'])
 def home():
-    
-     if request.method =='POST':
-          if(request.form.get('email')!= NULL and request.form.get('password')!= NULL) :
+    global custId
+    custId = ''   # clears custId from form
+    if request.method =='POST':
+        if(request.form.get('email')!= NULL and request.form.get('password')!= NULL) :
             email = request.form.get('email')
             password = request.form.get('password')
             
@@ -63,11 +73,16 @@ def home():
                 return render_template("index.html")
                 
 
-            else:
-                
-                return render_template('profile.html')   
+            else:        
+                userRow = dict(data)
+                custId = userRow['id']
+                statement = f"SELECT * from createprofile WHERE custId = '{custId}';"
+                c.execute(statement)
+                data = c.fetchone()
+                profile = dict(data)
+                return render_template('profile.html', profile=profile)   
 
-     elif request.method == 'GET':
+    elif request.method == 'GET':
         return render_template('index.html')
 
 @app.route('/home/createacc/', methods=['GET', 'POST'])
@@ -97,6 +112,12 @@ def createacc():
                     conn.execute('INSERT INTO userinfo2 (fullname,email,password1,password2) VALUES(?,?,?,?)',(fullname,email,password1,password2))
                     conn.execute('INSERT INTO userinfo (email,password) VALUES(?,?)',(email,password1))
                     conn.commit()
+                    statement = f"SELECT * from userinfo WHERE email ='{email}' AND password = '{password1}';"
+                    c.execute(statement)
+                    row = c.fetchall()        
+                    userRow = dict(row[0])
+                    global custId
+                    custId = userRow['id']
                     conn.close() 
             return render_template('createprofile.html')   
         else:
@@ -112,12 +133,21 @@ def createacc():
 
 @app.route('/home/profile/', methods=['GET', 'POST'])
 def profile():
-    return render_template('profile.html') #Run script (python -m flask run) and go to localhost:5000/home/profile
+    global custId
+    statement = f"SELECT * from createprofile WHERE custId = '{custId}';"
+    conn= get_db_connection()
+    c=conn.cursor()
+    c.execute(statement)
+    data = c.fetchone()
+    conn.close()
+    profile = dict(data)
+    return render_template('profile.html', profile=profile)
+    
 
 
 @app.route('/home/createprofile/', methods=['GET', 'POST'])
 def createProfile(): 
-    custId='001'
+    global custId
     errorOccurred = ""
     errors = 0
     name = request.form.get("Full Name")
@@ -146,7 +176,6 @@ def createProfile():
         errors += 1
 
     if validateProfile.validate(name, address1, address2, city, state, zipcode):           
-
             conn = get_db_connection()
             conn.execute('INSERT INTO createprofile (custId, name, address1, address2, city, state, zipcode) VALUES (?, ?, ?, ?, ?, ?, ?)',
                             (custId, name, address1, address2, city, state, zipcode))
@@ -159,8 +188,14 @@ def createProfile():
             
     else: 
         errorOccurred = "Finished Profile"
-        print(request.form)
-        return render_template('profile.html', name=name, address1=address1, address2=address2, city=city, state=state, zipcode=zipcode) 
+        statement = f"SELECT * from createprofile WHERE custId = '{custId}';"
+        conn= get_db_connection()
+        c=conn.cursor()
+        c.execute(statement)
+        data = c.fetchone()
+        conn.close()
+        profile = dict(data)
+        return render_template('profile.html', profile=profile) 
     
 # --------------Molina---------------
 
@@ -191,21 +226,20 @@ def getQuoteHistory (custId):
 @app.route('/home/getquote/')       #Run script (python -m flask run) and go to localhost:5000//home/getquote
 def getQuote():
     # populate profile data into top of quote form
-    #custId = request.form['custId']    #custId extracted from profile 'Get Your Quote Today' button
-    custId='001'
+    global custId
     profile = getProfileData(custId)
     quoteHistory = getQuoteHistory(custId)            
     return render_template('FuelQuoteForm.html', profile=profile, quoteHistory=quoteHistory)  
 
 @app.route('/home/quoteresult/', methods = ['POST', 'GET'])     #send quote request to server
-def quoteResult():
-    custId='001'               #hardcode quote data in lieu of profile data
+def quoteResult():               
     form = request.form
     
     if request.method == 'POST':
         date = request.form['date']
         gallons = request.form['gallons']
         fuel = request.form['fuel']
+        global custId
         profile = getProfileData(custId)
 
         if fuelQuoteFormValidations.validate(date, gallons, fuel):
