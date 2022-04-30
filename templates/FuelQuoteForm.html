@@ -11,24 +11,24 @@
         <form method="POST" action = "http://localhost:5000/home/quoteresult/" enctype="multipart/form-data">    
                       
             <div> <!--this will auto-populate from Client Profile-->
-                <label for="address1">Delivery Address 1:</label>
-                <input type="text" id="address1" name="address1" value="{{profile['address1']}}" placeholder="auto-complete from db">
+                <label>Delivery Address 1:</label>
+                <label1>{{profile['address1']}}</label1>  
             </div>
             <div> <!--this will auto-populate from Client Profile-->
-                <label for="address2">Delivery Address 2:</label>
-                <input type="text" id="address2" name="address2" value="{{profile['address2']}}" placeholder="auto-complete from db">
+                <label>Delivery Address 2:</label>
+                <label1>{{profile['address2']}}</label1>
             </div>
             <div> <!--this will auto-populate from Client Profile-->
-                <label for="city">Delivery City:</label>
-                <input type="text" id="city" name="city" value="{{profile['city']}}" placeholder="auto-complete from db">
+                <label>Delivery City:</label>
+                <label1>{{profile['city']}}</label1>
             </div>
             <div> <!--this will auto-populate from Client Profile-->
-                <label for="state">Delivery State:</label>
-                <input type="text" id="state" name="state" value="{{profile['state']}}" placeholder="auto-complete from db">
+                <label>Delivery State:</label>
+                <label1>{{profile['state']}}</label1>
             </div>
             <div> <!--this will auto-populate from Client Profile-->
-                <label for="zipcode">Delivery Zip Code:</label>
-                <input type="text" id="zipcode" name="zipcode" value="{{profile['zipcode']}}" placeholder="auto-complete from db">
+                <label>Delivery Zip Code:</label>
+                <label1>{{profile['zipcode']}}</label1>
             </div>
             <div> 
                 <label class="required" for="date">Delivery Date:</label>
@@ -78,7 +78,7 @@
 
         <!--These are at the top right of the page-->
         <div class="hello" style="text-align: right; font-style: italic;">
-            <p>Hello Name!</p> 
+            <p>Hello {{profile['name']}}!</p> 
         </div>
         <div style="text-align: right;">
             <!--<form name="form" method="post" action="goToProfile.php">-->
