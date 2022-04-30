@@ -177,10 +177,19 @@ def createProfile():
 
     if validateProfile.validate(name, address1, address2, city, state, zipcode):           
             conn = get_db_connection()
-            conn.execute('INSERT INTO createprofile (custId, name, address1, address2, city, state, zipcode) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            cur=conn.cursor()
+            #is this an update(existing) or insert(new) profile?
+            query = f'SELECT * from createprofile WHERE custID={custId}'
+            cur.execute(query)
+            row = cur.fetchall()        #list with 1 dict (1 row for custID)
+            if row is None: 
+                cur.execute('INSERT INTO createprofile (custId, name, address1, address2, city, state, zipcode) VALUES (?, ?, ?, ?, ?, ?, ?)',
                             (custId, name, address1, address2, city, state, zipcode))
+            else:
+                query = f'UPDATE createprofile SET name="{name}", address1="{address1}", address2="{address2}", city="{city}", state="{state}", zipcode="{zipcode}" WHERE custID="{custId}"'
+                cur.execute(query) 
+                             
             conn.commit()
-
             conn.close()
             print(errors, "Error", errorOccurred)
     if errors >= 1:
@@ -199,14 +208,31 @@ def createProfile():
     
 # --------------Molina---------------
 
-#this function returns customer profile as a dict, to render in html quote form
+#this route provides user with current profile in order to update/save it
+@app.route('/home/editprofile/', methods=['GET'])
+def editProfile(): 
+    global custId
+    profile = getProfileData(custId)    #this will return blank creatprofile, or an existing user editprofile
+    return render_template('createprofile.html', profile=profile)
+
+#this function returns customer profile as a dict, either as new 'createprofile' or existing user 'editprofile'
 def getProfileData (custId):
     conn = get_db_connection()
     cur = conn.cursor()
     query = f'SELECT * from createprofile WHERE custID={custId}'
     cur.execute(query)
     row = cur.fetchall()        #list with 1 dict (1 row for custID)
-    return dict(row[0])
+    if row is None:
+        profile = []        #create empty dict to display createprofile form
+        profile['state'] = ''
+        profile['name'] = ''
+        profile['address1'] = ''
+        profile['address2'] = ''
+        profile['city'] = ''
+        profile['zipcode'] = ''
+    else:
+        profile = dict(row[0])
+    return profile
 
 #this function returns a list of dicts where each dict is a row in the query result (history)
 def getQuoteHistory (custId):
