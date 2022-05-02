@@ -32,19 +32,19 @@
             </div>
             <div> 
                 <label class="required" for="date">Delivery Date:</label>
-                <input type="date" id="date" name="date" value="{{date}}" required > 
+                <input type="date" id="date" name="date" value="{{quote['date']}}" required > 
             </div>
             <div>
                 <label class="required" for="gallons">Gallons Requested:</label>
-                <input type="number" min="1" name="gallons" id="gallons" value="{{gallons}}" required>
+                <input type="number" min="1" name="gallons" id="gallons" value="{{quote['gallons']}}" required>
                 </div>
             <div> 
                 <label for="fuel">Choose Fuel Type:</label>
-                <select name="fuel" id="fuel" value="{{fuel}}" required>
-                    <option value="">None</option>
-                    <option value="regUnl">Regular Unleaded</option>
-                    <option value="premUnl">Premium Unleaded</option>
-                    <option value="diesel">Diesel</option>
+                <select name="fuel" id="fuel" required>
+                    <option value="" disabled selected >None</option> 
+                    <option value="regUnl" name="regUnl" {% if fuel =="regUnl" %} selected {% endif %}>Regular Unleaded</option>
+                    <option value="premUnl" name="premUnl" {% if fuel =="premUnl" %} selected {% endif %}>Premium Unleaded</option>
+                    <option value="diesel" name="diesel" {% if fuel =="diesel" %} selected {% endif %}>Diesel</option>
                 </select>
             </div>
             <div> <!--this will auto-populate from Pricing Module-->
@@ -52,10 +52,11 @@
                <input type="text" id="price" name="price" placeholder="auto-complete from pricing module">
             </div>
             <div style="margin-top: 12px; width: 200px"> 
-                <!--quote button will 1.send data to pricing module, 2. send data to history table,
-                and 3. clear the quote form for next quote -->
+                <!--Get Quote button will send data to pricing module only; 
+                    Save Quote button will send data to database and populate history table-->
                 
                 <input type="submit" value="Get Quote" onclick="getQuote()" id="changeColor2">
+                
                 <!--validates required fields before quote submitted-->
                 <script>
                     function getQuote(){
@@ -68,11 +69,26 @@
                     }
                 </script>
             </div>
+            <div style="margin-top: 12px; width: 200px">
+                <input type="submit" value="Save Quote" onclick="saveQuote()" formaction="http://localhost:5000/home/savequote/" id="changeColor3">
+            </div>
                 
-        </form>
+        
         <div> <!--the price will come from Pricing Module-->
-            <label for="quote" style="color:green; font-weight: bold; font-style: italic;">Total Amount Due:  </label>
-            <input type="text" value = "{{quote}}" id= "quote" name="quote">
+            <label for="charge" style="color:green; font-weight: bold; font-style: italic;">Total Amount Due:  </label>
+            <input type="text" value = "{{quote['totalCharge']}}" id= "charge" name="charge">
+            <script>
+                function saveQuote(){
+                    let form_date = document.querySelector('[name="date"]').value;
+                    let form_gallons = document.querySelector('[name="gallons"]').value;
+                    let form_fuel = document.querySelector('[name="fuel"]').value;
+                    if (form_date=="" || form_gallons=="" || form_fuel=="") {
+                        return false;   //prevents quote request
+                    }
+                }
+            </script>
+        </div>
+        </form>
         </div>
         </div>
 

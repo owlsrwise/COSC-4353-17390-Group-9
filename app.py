@@ -223,7 +223,7 @@ def getProfileData (custId):
     cur.execute(query)
     row = cur.fetchall()        #list with 1 dict (1 row for custID)
     if row is None:
-        profile = []        #create empty dict to display createprofile form
+        profile = {}        #create empty dict to display createprofile form
         profile['state'] = ''
         profile['name'] = ''
         profile['address1'] = ''
@@ -249,48 +249,67 @@ def getQuoteHistory (custId):
         quoteHistory.append(dict(row))     #cast each row in query list as a dict; append to history
     return quoteHistory
 
-@app.route('/home/getquote/')       #Run script (python -m flask run) and go to localhost:5000//home/getquote
+@app.route('/home/getquote/')       
 def getQuote():
     # populate profile data into top of quote form
     global custId
+    quote = {}
     profile = getProfileData(custId)
     quoteHistory = getQuoteHistory(custId)            
-    return render_template('FuelQuoteForm.html', profile=profile, quoteHistory=quoteHistory)  
+    return render_template('FuelQuoteForm.html', profile=profile, quoteHistory=quoteHistory, quote=quote, fuel='')  
 
-@app.route('/home/quoteresult/', methods = ['POST', 'GET'])     #send quote request to server
+@app.route('/home/quoteresult/', methods = ['POST'])     #send quote request to pricing module
 def quoteResult():               
-    form = request.form
+    quote = {}              #quote = delivery date + gallons + fuel 
+    quote['date'] = request.form['date']
+    quote['gallons'] = request.form['gallons']
+    quote['fuel'] = request.form['fuel']
+    global custId
+    profile = getProfileData(custId)
+
+    if fuelQuoteFormValidations.validate(quote):
+        # form data -> pricing module -> compare state to FuelPrices db table -> populate FuelQuoteData db table
+        # pricing module here
+        quote['totalCharge']='$19.50'             #hardcode quote data in lieu of pricing module
+        
+        # populate Quote History user view
+        quoteHistory = getQuoteHistory(custId)            
+        return render_template('FuelQuoteForm.html', profile=profile, quoteHistory=quoteHistory, quote=quote, fuel=quote['fuel'])    
     
-    if request.method == 'POST':
-        date = request.form['date']
-        gallons = request.form['gallons']
-        fuel = request.form['fuel']
-        global custId
-        profile = getProfileData(custId)
-
-        if fuelQuoteFormValidations.validate(date, gallons, fuel):
-            # form data -> pricing module -> compare state to FuelPrices db table -> populate FuelQuoteData db table
-            # pricing module here
-            quote='$19.50'             #hardcode quote data in lieu of pricing module
-            
-            # populate FuelQuoteData db table
-            conn = get_db_connection()
-            conn.execute('INSERT INTO FuelQuoteData (custId, date, gallons, fuel, quote) VALUES (?, ?, ?, ?, ?)',
-                         (custId, date, gallons, fuel, quote))
-            conn.commit()
-            conn.close()
-            
-            # populate Quote History user view
-            quoteHistory = getQuoteHistory(custId)            
-            return render_template('FuelQuoteForm.html', form=form, quote=quote, profile=profile, quoteHistory=quoteHistory)    
-        
-        else:
-            print("Incorrect data format, should be YYYY-MM-DD")
-            return render_template('FuelQuoteForm.html')
     else:
-        return render_template('FuelQuoteForm.html')        #return blank form
+        print("Incorrect data format, should be YYYY-MM-DD")
+        return render_template('FuelQuoteForm.html')
         
+@app.route('/home/savequote/', methods = ['POST'])     #save quote to database and history table
+def saveQuote():               
+    quote = {}              #quote = delivery date + gallons + fuel + totalCharge
+    quote['date'] = request.form['date']
+    quote['gallons'] = request.form['gallons']
+    quote['fuel'] = request.form['fuel']
+    quote['totalCharge']= request.form['charge']        #hardcode quote data in lieu of pricing module
+    
+    global custId
+    profile = getProfileData(custId)
 
+    if fuelQuoteFormValidations.validate(quote):
+        # pricing module here
+        
+        
+        # populate FuelQuoteData db table
+        conn = get_db_connection()
+        conn.execute('INSERT INTO FuelQuoteData (custId, date, gallons, fuel, quote) VALUES (?, ?, ?, ?, ?)',
+                        (custId, quote['date'], quote['gallons'], quote['fuel'], quote['totalCharge']))
+        conn.commit()
+        conn.close()
+        
+        # populate Quote History user view
+        quoteHistory = getQuoteHistory(custId)            
+        return render_template('FuelQuoteForm.html', profile=profile, quoteHistory=quoteHistory, quote=quote, fuel=quote['fuel'])    
+    
+    else:
+        print("Incorrect data format, should be YYYY-MM-DD")
+        return render_template('FuelQuoteForm.html')
+    
 
                  
 
