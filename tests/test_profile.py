@@ -1,6 +1,6 @@
 import unittest
 from app import *
-from createProfile import *
+from validateProfile import *
 
 class ProfileTestCase(unittest.TestCase):
 
