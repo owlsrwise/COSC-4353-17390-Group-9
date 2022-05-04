@@ -4,6 +4,7 @@ import sqlite3
 import fuelQuoteFormValidations
 import createProfile
 from datetime import datetime
+import re
 
 
 app = Flask(__name__)
@@ -18,13 +19,18 @@ def get_db_connection():
 
 
 # --------------Nicole--------------
+regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+
+
+  
+
 @app.route('/', methods = ['GET', 'POST'])
 def home1():
     if request.method =='POST':
           if(request.form.get('email')!= NULL and request.form.get('password')!= NULL) :
             email = request.form.get('email')
             password = request.form.get('password')
-            
+       
             conn= get_db_connection()
             c=conn.cursor()
             
@@ -32,6 +38,7 @@ def home1():
             c.execute(statement)
             data = c.fetchone()
             if not data: 
+                flash("Please enter a valid username and password")
                 return render_template("index.html")
                 
 
@@ -50,7 +57,27 @@ def home():
           if(request.form.get('email')!= NULL and request.form.get('password')!= NULL) :
             email = request.form.get('email')
             password = request.form.get('password')
+
+            def checkemail(email):
+               if( re.fullmatch(regex,email)):
+                    return True
+               else:
+                    return False
+
+
+            if (checkemail(email)== False):
+               flash('the email address is invalid please enter a valid email address', category ='error1')      
             
+            if len(email) < 1: 
+                flash('please enter an email address', category = 'error1')
+            if len(email) < 4:
+               flash('email is too short please enter email address', category = 'error1')
+            if len(email) == 0:
+                flash('email cannot be left blank', category = 'error1')
+            if len(password) < 4:
+                flash('password is too short please enter password', category = 'error1')
+            if len(password) == 0:
+                flash('password left blank please enter password', category = 'error1')
             conn= get_db_connection()
             c=conn.cursor()
             
@@ -81,14 +108,31 @@ def createacc():
         print(password1)
         password2=request.form.get('password2')
         print(password2)
-        if password1 == password2 :
+        def checkemail(email):
+               if( re.fullmatch(regex,email)):
+                    return True
+               else:
+                    return False
+
+
+        if (checkemail(email)== False):
+            flash('the email address is invalid please enter a valid email address', category ='error')    
+        if len(fullname) < 2: 
+            flash('Name is not valid please enter a valid name', category ='error')
+        if len(email) < 2:
+            flash ('email is not valid please enter a valid email', category = 'error')
+        if len(password1) < 3:
+            flash('please enter a valid password. Password is too short', category = 'error')
+        
+
+        if password1 == password2 and len(password1) != 0 and checkemail(email) == True :
          conn= get_db_connection()
          c=conn.cursor()
          statement = f"SELECT * from userinfo WHERE email ='{email}' AND password = '{password1}';"
          c.execute(statement)
          data = c.fetchone()
          if data: 
-                return render_template("error.html")
+                return render_template("createacc.html")
 
          else:
             if not data:
@@ -97,7 +141,7 @@ def createacc():
                     conn.close() 
             return render_template('createprofile.html')   
         else:
-            return render_template('error.html')
+            return render_template('createacc.html')
     elif request.method == 'GET':
         return render_template('createacc.html')
                #Run script (python -m flask run) and go to localhost:5000/home
