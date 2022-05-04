@@ -1,5 +1,5 @@
 from asyncio.windows_events import NULL
-from flask import Flask, request, render_template , flash
+from flask import Flask, request, render_template , flash, redirect
 import sqlite3
 import fuelQuoteFormValidations
 import validateProfile
@@ -249,14 +249,14 @@ def getQuoteHistory (custId):
         quoteHistory.append(dict(row))     #cast each row in query list as a dict; append to history
     return quoteHistory
 
-@app.route('/home/getquote/')       
+@app.route('/home/getquote/', methods = ['POST', 'GET'])       
 def getQuote():
     # populate profile data into top of quote form
     global custId
     quote = {}
     profile = getProfileData(custId)
     quoteHistory = getQuoteHistory(custId)            
-    return render_template('FuelQuoteForm.html', profile=profile, quoteHistory=quoteHistory, quote=quote, fuel='')  
+    return render_template('FuelQuoteForm.html', profile=profile, quoteHistory=quoteHistory, quote=quote, fuel='', buttonName="Get Quote", buttonRedirect="http://localhost:5000/home/quoteresult/")  
 
 @app.route('/home/quoteresult/', methods = ['POST'])     #send quote request to pricing module
 def quoteResult():               
@@ -274,7 +274,7 @@ def quoteResult():
         
         # populate Quote History user view
         quoteHistory = getQuoteHistory(custId)            
-        return render_template('FuelQuoteForm.html', profile=profile, quoteHistory=quoteHistory, quote=quote, fuel=quote['fuel'])    
+        return render_template('FuelQuoteForm.html', profile=profile, quoteHistory=quoteHistory, quote=quote, fuel=quote['fuel'], buttonName="New Quote", buttonRedirect="http://localhost:5000/home/getquote/")    
     
     else:
         print("Incorrect data format, should be YYYY-MM-DD")
@@ -302,14 +302,9 @@ def saveQuote():
         conn.commit()
         conn.close()
         
-        # populate Quote History user view and return empty form
-        quoteHistory = getQuoteHistory(custId) 
-        quote['date'] = ""
-        quote['gallons'] = ""
-        quote['fuel'] = ""
-        quote['totalCharge']= ""           
-        return render_template('FuelQuoteForm.html', profile=profile, quoteHistory=quoteHistory, quote=quote, fuel="")    
-    
+        # send user back to get quote page, after save quote completed        
+        return redirect("http://localhost:5000/home/getquote/")
+
     else:
         print("Incorrect data format, should be YYYY-MM-DD")
         return render_template('FuelQuoteForm.html')

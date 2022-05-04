@@ -32,11 +32,11 @@
             </div>
             <div> 
                 <label class="required" for="date">Delivery Date:</label>
-                <input type="date" id="date" name="date" value="{{quote['date']}}" required > 
+                <input type="date" id="date" name="date" value="{{quote['date']}}" required {% if buttonName =="New Quote" %} readonly {% endif %}> 
             </div>
             <div>
                 <label class="required" for="gallons">Gallons Requested:</label>
-                <input type="number" min="1" name="gallons" id="gallons" value="{{quote['gallons']}}" required>
+                <input type="number" min="1" name="gallons" id="gallons" value="{{quote['gallons']}}" required {% if buttonName =="New Quote" %} readonly {% endif %}
                 </div>
             <div> 
                 <label for="fuel">Choose Fuel Type:</label>
@@ -54,8 +54,8 @@
             <div style="margin-top: 12px; width: 200px"> 
                 <!--Get Quote button will send data to pricing module only; 
                     Save Quote button will send data to database and populate history table-->
-                
-                <input type="submit" value="Get Quote" id="changeColor2">
+                 
+                <input type="submit" id="changeColor2" value="{{buttonName}}" formaction="{{buttonRedirect}}">
                 
                 <!--validates required fields before quote submitted-->
                 <script>
