@@ -19,11 +19,11 @@ h2 {
     to { font-size: larger; }
 }
 form label {
-    text-align: left;
+    text-align: left; font-style: italic;
 }
 form label1 {
     text-align: left;
-    color:#307D99;
+    color:#307D99; font-weight: bold;
 }
 form div {
     margin-top: 8px;

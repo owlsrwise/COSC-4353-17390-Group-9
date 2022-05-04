@@ -55,20 +55,38 @@
                 <!--Get Quote button will send data to pricing module only; 
                     Save Quote button will send data to database and populate history table-->
                 
-                <input type="submit" value="Get Quote" onclick="getQuote()" id="changeColor2">
+                <input type="submit" value="Get Quote" id="changeColor2">
                 
                 <!--validates required fields before quote submitted-->
                 <script>
-                    function getQuote(){
-                        let form_date = document.querySelector('[name="date"]').value;
-                        let form_gallons = document.querySelector('[name="gallons"]').value;
-                        let form_fuel = document.querySelector('[name="fuel"]').value;
-                        if (form_date=="" || form_gallons=="" || form_fuel=="") {
-                            return false;   //prevents quote request
-                        }
-                    }
+                    window.addEventListener("load", function() {
+                        let form = document.querySelector("form");
+                        form.addEventListener("submit", function(event) {
+                            let form_date = document.querySelector('[name="date"]').value;
+                            let form_gallons = document.querySelector('[name="gallons"]').value;
+                            let form_fuel = document.querySelector('[name="fuel"]').value;
+                            if (form_date=="" || form_gallons=="" || form_fuel=="") {
+                                event.preventDefault();   //prevents quote request
+                            }
+                            var today = new Date();
+                            var month = today.getUTCMonth() + 1; 
+                            var day = today.getUTCDate();
+                            var year = today.getUTCFullYear();
+                            if(day<10){
+                                day='0'+day;
+                            } 
+                            if(month<10){
+                                month='0'+month;
+                            } 
+                            today = year + "-" + month + "-" + day;
+                            if (form_date <= today) {
+                                alert("Date must be in the future");
+                                event.preventDefault();
+                            }
+                        });
+                    });
                 </script>
-            </div>
+            </div> 
             <div style="margin-top: 12px; width: 200px">
                 <input type="submit" value="Save Quote" onclick="saveQuote()" formaction="http://localhost:5000/home/savequote/" id="changeColor3">
             </div>
@@ -76,14 +94,15 @@
         
         <div> <!--the price will come from Pricing Module-->
             <label for="charge" style="color:green; font-weight: bold; font-style: italic;">Total Amount Due:  </label>
-            <input type="text" value = "{{quote['totalCharge']}}" id= "charge" name="charge">
+            <input type="text" value = "{{quote['totalCharge']}}" id= "charge" name="charge" readonly>
             <script>
                 function saveQuote(){
                     let form_date = document.querySelector('[name="date"]').value;
                     let form_gallons = document.querySelector('[name="gallons"]').value;
                     let form_fuel = document.querySelector('[name="fuel"]').value;
-                    if (form_date=="" || form_gallons=="" || form_fuel=="") {
-                        return false;   //prevents quote request
+                    let form_charge = document.querySelector('[name="charge"]').value;
+                    if (form_date=="" || form_gallons=="" || form_fuel=="" || form_charge=="") {
+                        return false;   //prevents saving quote to history
                     }
                 }
             </script>
@@ -94,7 +113,7 @@
 
         <!--These are at the top right of the page-->
         <div class="hello" style="text-align: right; font-style: italic;">
-            <p>Hello {{profile['name']}}!</p> 
+            <p>Hello, {{profile['name']}}!</p> 
         </div>
         <div style="text-align: right;">
             <!--<form name="form" method="post" action="goToProfile.php">-->
