@@ -19,7 +19,11 @@ h2 {
     to { font-size: larger; }
 }
 form label {
+    text-align: left; font-style: italic;
+}
+form label1 {
     text-align: left;
+    color:#307D99; font-weight: bold;
 }
 form div {
     margin-top: 8px;
@@ -52,6 +56,11 @@ div span {
 div input[value="Get Quote"] {
     border: 2px green solid;
     border-radius: 5px;
+}
+div input[value="Save Quote"] {
+    border: 2px #307D99 solid;
+    border-radius: 5px;
+    margin-left: 100;
 }
 div ::placeholder {
     font-size: 9px;

@@ -20,21 +20,20 @@
             <div class="form-account">
 
   <label for="Full Name">Full Name:</label>
-  <input type="text2" id="Full Name" name="Full Name"
-  maxlength="50" required>
+  <input type="text2" id="Full Name" name="Full Name" value= "{{profile['name']}}" maxlength="50" required>
               
                        
                       <label for="Address 1"> Address 1:</label>
-                      <input type="text2" maxlength="100" name= "Address 1" id = "Address 1" required>
+                      <input type="text2" maxlength="100" name= "Address 1" id = "Address 1" value= "{{profile['address1']}}" required>
 
                       <label for="Address 2"> Address 2:</label>
-                      <input type="text2" maxlength="100" name= "Address 2" id = "Address 2">
+                      <input type="text2" maxlength="100" name= "Address 2" id = "Address 2" value= "{{profile['address2']}}">
 
                       <label for="City">  City:</label>
-                      <input type="text2" maxlength="100" name= "City" id = "City" required>
+                      <input type="text2" maxlength="100" name= "City" id = "City" value= "{{profile['city']}}" required>
 
               <label for="State">  State:</label>
-              <select name="State" id="State">
+              <select name="State" id="State" value= "{{profile['state']}}">
 	<option value="AL">Alabama</option>
 	<option value="AK">Alaska</option>
 	<option value="AZ">Arizona</option>
@@ -89,7 +88,7 @@
 </select>>
 
                <label for="Zipcode">  Zipcode:</label>
-                      <input type="text2" minlength="5" maxlength="9" name= "Zipcode" id = "Zipcode" required>
+                      <input type="text2" minlength="5" maxlength="9" name= "Zipcode" id = "Zipcode" value= "{{profile['zipcode']}}" required>
                
                       <!-- <input type="button2" onclick="window.location.href='/home/profile';" value="Save Profile" id = "cta-ac"> -->
 					  <input type="submit" value="Save Profile" id="cta-ac">

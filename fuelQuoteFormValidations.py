@@ -1,7 +1,10 @@
 import datetime
 
 # validate Delivery Date, Gallons Requested, Fuel Type form fields 
-def validate(date_text, numGallons, fuelType):
+def validate(quote):
+    date_text = quote['date']
+    numGallons = quote['gallons']
+    fuelType = quote['fuel']
     
     # verify all inputs are strings
     if not isinstance(date_text, str):
