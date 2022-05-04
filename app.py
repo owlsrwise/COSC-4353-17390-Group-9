@@ -5,6 +5,7 @@ import fuelQuoteFormValidations
 import validateProfile
 from datetime import datetime
 import init_db
+import pricingModule
 
 custId = None               #customer id to be unique for each user
 app = Flask(__name__)
@@ -269,11 +270,23 @@ def quoteResult():
 
     if fuelQuoteFormValidations.validate(quote):
         # form data -> pricing module -> compare state to FuelPrices db table -> populate FuelQuoteData db table
-        # pricing module here
-        quote['totalCharge']='$19.50'             #hardcode quote data in lieu of pricing module
+        quoteHistory = getQuoteHistory(custId)    # populate Quote History user view
+        if quoteHistory:
+            prevUser = 1
+        else:
+            prevUser = 0
         
-        # populate Quote History user view
-        quoteHistory = getQuoteHistory(custId)            
+        state = profile['state']
+        
+        # pricing module here
+        newPrice = pricingModule.pricing()          #instantiate pricing module class
+        gallons = int(quote['gallons'])
+        fuelType = quote['fuel']
+        suggestedPrice = newPrice.getTotal(state, prevUser, gallons, fuelType)
+
+        quote['totalCharge']= f'${suggestedPrice * gallons:.2f}'
+        quote['suggestedPrice'] = f'${suggestedPrice:.2f}'
+
         return render_template('FuelQuoteForm.html', profile=profile, quoteHistory=quoteHistory, quote=quote, fuel=quote['fuel'], buttonName="New Quote", buttonRedirect="http://localhost:5000/home/getquote/")    
     
     else:
