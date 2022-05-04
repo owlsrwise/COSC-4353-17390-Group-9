@@ -302,9 +302,13 @@ def saveQuote():
         conn.commit()
         conn.close()
         
-        # populate Quote History user view
-        quoteHistory = getQuoteHistory(custId)            
-        return render_template('FuelQuoteForm.html', profile=profile, quoteHistory=quoteHistory, quote=quote, fuel=quote['fuel'])    
+        # populate Quote History user view and return empty form
+        quoteHistory = getQuoteHistory(custId) 
+        quote['date'] = ""
+        quote['gallons'] = ""
+        quote['fuel'] = ""
+        quote['totalCharge']= ""           
+        return render_template('FuelQuoteForm.html', profile=profile, quoteHistory=quoteHistory, quote=quote, fuel="")    
     
     else:
         print("Incorrect data format, should be YYYY-MM-DD")
