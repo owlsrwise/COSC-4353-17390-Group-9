@@ -1,20 +1,35 @@
 from fuelQuoteFormValidations import *
 
 # test erroneous values for just Delivery Date (other fields valid)
-def test_notAstring():
-    assert not validate(48, '1', 'regUnl')
+def test_date_notAstring():
+    quote={}
+    quote['date']=48
+    quote['gallons']='1'
+    quote['fuel']='regUnl'
+    assert not validate(quote)
 
 def test_previousDate():
-    assert not validate('2019-03-06', '1', 'regUnl')
+    quote={}
+    quote['date']='2019-03-06'
+    quote['gallons']='1'
+    quote['fuel']='regUnl'
+    assert not validate(quote)
 
 def test_DateFormat():
-    assert not validate('06-10-2022', '1', 'regUnl')
-    assert not validate('06/06/2022', '1', 'regUnl')
-    assert not validate('06.06.2022', '1', 'regUnl')
-    assert not validate(None, '1', 'regUnl')
+    quote={}
+    quote['gallons']='1'
+    quote['fuel']='regUnl'
+    assert not validate(quote)
+    quote['date']='06-10-2022'
+    assert not validate(quote)
+    quote['date']='06/06/2022'
+    assert not validate(quote)
+    quote['date']='06.06.2022'
+    assert not validate(quote)
+  
 
 # test erroneous values for just Gallons Requested (other fields valid)
-def test_notAstring():
+def test_gallons_notAstring():
     assert not validate('2022-06-10', 86, 'regUnl')
 
 def test_ifGallonsNumeric():
@@ -35,7 +50,7 @@ def test_ifGallonsLessthanZero():
     assert not validate('2022-06-10', '-1.3', 'regUnl')
 
 # test erroneous values for just Fuel Type (other fields valid)
-def test_notAstring():
+def test_fuel_notAstring():
     assert not validate('2022-06-10', '1', 57)
 
 def test_ifFuelTypeNotInList():

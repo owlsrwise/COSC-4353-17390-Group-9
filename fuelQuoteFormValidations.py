@@ -2,8 +2,14 @@ import datetime
 
 # validate Delivery Date, Gallons Requested, Fuel Type form fields 
 def validate(quote):
+    if 'date' not in quote:
+        return False
     date_text = quote['date']
+    if 'gallons' not in quote:
+        return False
     numGallons = quote['gallons']
+    if 'fuel' not in quote:
+        return False
     fuelType = quote['fuel']
     
     # verify all inputs are strings
