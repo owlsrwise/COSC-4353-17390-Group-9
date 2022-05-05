@@ -239,10 +239,9 @@ def getProfileData (custId):
 def getQuoteHistory (custId):
     conn = get_db_connection()
     cur = conn.cursor()
-    query = f'select address1, address2, city, state, zipcode, date, gallons, fuel, quote FROM createprofile \
-            INNER JOIN FuelQuoteData ON FuelQuoteData.custId = createprofile.custId \
-            WHERE FuelQuoteData.custId={custId} \
-            ORDER BY date DESC'
+    query = f'SELECT address1, address2, city, state, zipcode, date, gallons, fuel, quote FROM FuelQuoteData \
+        WHERE FuelQuoteData.custId={custId} \
+        ORDER BY date DESC'
     cur.execute(query)
     queryResult = cur.fetchall()        
     quoteHistory = []
@@ -299,19 +298,20 @@ def saveQuote():
     quote['date'] = request.form['date']
     quote['gallons'] = request.form['gallons']
     quote['fuel'] = request.form['fuel']
-    quote['totalCharge']= request.form['charge']        #hardcode quote data in lieu of pricing module
+    quote['totalCharge']= request.form['charge']        
     
     global custId
     profile = getProfileData(custId)
 
     if fuelQuoteFormValidations.validate(quote):
-        # pricing module here
-        
         
         # populate FuelQuoteData db table
         conn = get_db_connection()
-        conn.execute('INSERT INTO FuelQuoteData (custId, date, gallons, fuel, quote) VALUES (?, ?, ?, ?, ?)',
-                        (custId, quote['date'], quote['gallons'], quote['fuel'], quote['totalCharge']))
+        query = f"INSERT INTO FuelQuoteData" \
+            "(custId, date, address1, address2, city, state, zipcode, gallons, fuel, quote)" \
+            "VALUES (custId, quote['date'], profile['address1'], profile['address2'], profile['city'], profile['state'], profile['zipcode'],quote['gallons'], quote['fuel'], quote['totalCharge'])"
+                         
+        conn.execute(query)
         conn.commit()
         conn.close()
         
