@@ -6,6 +6,7 @@ import validateProfile
 from datetime import datetime
 import init_db
 import pricingModule
+import re
 
 custId = None               #customer id to be unique for each user
 app = Flask(__name__)
@@ -21,6 +22,11 @@ def get_db_connection():
 
 
 # --------------Nicole--------------
+regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+
+
+
+
 @app.route('/', methods = ['GET', 'POST'])
 def home1():
     if request.method =='POST':
@@ -35,6 +41,7 @@ def home1():
             c.execute(statement)
             data = c.fetchone()
             if not data: 
+                flash("Please enter a valid username and password")
                 return render_template("index.html")
                 
 
@@ -42,13 +49,7 @@ def home1():
                 userRow = dict(data)
                 global custId
                 custId = userRow['id']          #takes autoincrement row id into custId
-                statement = f"SELECT * from createprofile WHERE custId = '{custId}';"
-                conn= get_db_connection()
-                c=conn.cursor()
-                c.execute(statement)
-                data = c.fetchone()
-                conn.close()
-                profile = dict(data)
+                profile = getProfileData(custId)
                 return render_template('profile.html', profile=profile)   
 
     elif request.method == 'GET':
@@ -64,6 +65,26 @@ def home():
             email = request.form.get('email')
             password = request.form.get('password')
             
+            def checkemail(email):
+               if( re.fullmatch(regex,email)):
+                    return True
+               else:
+                    return False
+
+
+            if (checkemail(email)== False):
+               flash('the email address is invalid please enter a valid email address', category ='error1')      
+            
+            if len(email) < 1: 
+                flash('please enter an email address', category = 'error1')
+            if len(email) < 4:
+               flash('email is too short please enter email address', category = 'error1')
+            if len(email) == 0:
+                flash('email cannot be left blank', category = 'error1')
+            if len(password) < 4:
+                flash('password is too short please enter password', category = 'error1')
+            if len(password) == 0:
+                flash('password left blank please enter password', category = 'error1')
             conn= get_db_connection()
             c=conn.cursor()
             
@@ -99,14 +120,31 @@ def createacc():
         print(password1)
         password2=request.form.get('password2')
         print(password2)
-        if password1 == password2 :
+        def checkemail(email):
+               if( re.fullmatch(regex,email)):
+                    return True
+               else:
+                    return False
+
+
+        if (checkemail(email)== False):
+            flash('the email address is invalid please enter a valid email address', category ='error')    
+        if len(fullname) < 2: 
+            flash('Name is not valid please enter a valid name', category ='error')
+        if len(email) < 2:
+            flash ('email is not valid please enter a valid email', category = 'error')
+        if len(password1) < 3:
+            flash('please enter a valid password. Password is too short', category = 'error')
+        
+
+        if password1 == password2 and len(password1) != 0 and checkemail(email) == True :
          conn= get_db_connection()
          c=conn.cursor()
          statement = f"SELECT * from userinfo WHERE email ='{email}' AND password = '{password1}';"
          c.execute(statement)
          data = c.fetchone()
          if data: 
-                return render_template("error.html")
+                return render_template("createacc.html")
 
          else:
             if not data:
@@ -120,9 +158,10 @@ def createacc():
                     global custId
                     custId = userRow['id']
                     conn.close() 
-            return render_template('createprofile.html')   
+            profile=getProfileData(custId)
+            return render_template('createprofile.html', profile=profile)   
         else:
-            return render_template('error.html')
+            return render_template('createacc.html')
     elif request.method == 'GET':
         return render_template('createacc.html')
                #Run script (python -m flask run) and go to localhost:5000/home
@@ -182,7 +221,7 @@ def createProfile():
             #is this an update(existing) or insert(new) profile?
             query = f'SELECT * from createprofile WHERE custID={custId}'
             cur.execute(query)
-            row = cur.fetchall()        #list with 1 dict (1 row for custID)
+            row = cur.fetchone()        #list with 1 dict (1 row for custID)
             if row is None: 
                 cur.execute('INSERT INTO createprofile (custId, name, address1, address2, city, state, zipcode) VALUES (?, ?, ?, ?, ?, ?, ?)',
                             (custId, name, address1, address2, city, state, zipcode))
@@ -222,7 +261,7 @@ def getProfileData (custId):
     cur = conn.cursor()
     query = f'SELECT * from createprofile WHERE custID={custId}'
     cur.execute(query)
-    row = cur.fetchall()        #list with 1 dict (1 row for custID)
+    row = cur.fetchone()        #list with 1 dict (1 row for custID)
     if row is None:
         profile = {}        #create empty dict to display createprofile form
         profile['state'] = ''
@@ -232,17 +271,16 @@ def getProfileData (custId):
         profile['city'] = ''
         profile['zipcode'] = ''
     else:
-        profile = dict(row[0])
+        profile = dict(row)
     return profile
 
 #this function returns a list of dicts where each dict is a row in the query result (history)
 def getQuoteHistory (custId):
     conn = get_db_connection()
     cur = conn.cursor()
-    query = f'select address1, address2, city, state, zipcode, date, gallons, fuel, quote FROM createprofile \
-            INNER JOIN FuelQuoteData ON FuelQuoteData.custId = createprofile.custId \
-            WHERE FuelQuoteData.custId={custId} \
-            ORDER BY date DESC'
+    query = f'SELECT address1, address2, city, state, zipcode, date, gallons, fuel, quote FROM FuelQuoteData \
+        WHERE FuelQuoteData.custId={custId} \
+        ORDER BY date DESC'
     cur.execute(query)
     queryResult = cur.fetchall()        
     quoteHistory = []
@@ -299,19 +337,21 @@ def saveQuote():
     quote['date'] = request.form['date']
     quote['gallons'] = request.form['gallons']
     quote['fuel'] = request.form['fuel']
-    quote['totalCharge']= request.form['charge']        #hardcode quote data in lieu of pricing module
+    quote['totalCharge']= request.form['charge']        
     
     global custId
     profile = getProfileData(custId)
 
     if fuelQuoteFormValidations.validate(quote):
-        # pricing module here
-        
         
         # populate FuelQuoteData db table
         conn = get_db_connection()
-        conn.execute('INSERT INTO FuelQuoteData (custId, date, gallons, fuel, quote) VALUES (?, ?, ?, ?, ?)',
-                        (custId, quote['date'], quote['gallons'], quote['fuel'], quote['totalCharge']))
+        query = f"INSERT INTO FuelQuoteData \
+            (custId, date, address1, address2, city, state, zipcode, gallons, fuel, quote) \
+            VALUES ('{custId}', '{quote['date']}', '{profile['address1']}', '{profile['address2']}', '{profile['city']}', '{profile['state']}', \
+                '{profile['zipcode']}', '{quote['gallons']}', '{quote['fuel']}', '{quote['totalCharge']}')"
+                         
+        conn.execute(query)
         conn.commit()
         conn.close()
         
